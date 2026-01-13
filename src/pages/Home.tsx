@@ -22,7 +22,7 @@ const Home = () => {
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                const res = await api.get('/api/products?limit=8');
+                const res = await api.get('/api/products?limit=12');
                 setProducts(res.data);
                 setLoading(false);
             } catch (error) {
