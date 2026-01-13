@@ -1,0 +1,159 @@
+.product-card {
+    background: white;
+    border: 1px solid #f1f5f9;
+    /* Softer border */
+    border-radius: 1rem;
+    /* More rounded */
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    height: 100%;
+}
+
+.product-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+    border-color: #e2e8f0;
+}
+
+.product-image {
+    height: 240px;
+    /* Slightly taller */
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    background: #FAFAFA;
+    /* Very subtle grey bg for image area */
+}
+
+.product-image img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    transition: transform 0.5s ease;
+}
+
+.product-card:hover .product-image img {
+    transform: scale(1.05);
+    /* Subtle zoom */
+}
+
+/* Badges */
+.badge {
+    position: absolute;
+    top: 12px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 4px 10px;
+    text-transform: uppercase;
+    color: white;
+    z-index: 2;
+    border-radius: 99px;
+    /* Pill shape */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.badge-new {
+    left: 12px;
+    background: #0F172A;
+}
+
+.badge-sale {
+    right: 12px;
+    background: #EF4444;
+}
+
+/* Info */
+.product-info {
+    padding: 1.5rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    background: white;
+}
+
+.product-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #1E293B;
+    text-decoration: none;
+    margin-bottom: 0.5rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    line-height: 1.4;
+    min-height: 3em;
+}
+
+.product-title:hover {
+    color: #2563EB;
+}
+
+.product-description {
+    font-size: 0.9rem;
+    color: #64748B;
+    margin-bottom: 1.25rem;
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    height: 2.8rem;
+}
+
+.price-box {
+    margin-bottom: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.current-price {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #2563EB;
+}
+
+.old-price {
+    font-size: 0.95rem;
+    color: #94A3B8;
+    text-decoration: line-through;
+    font-weight: 500;
+}
+
+/* Modern Pill Button */
+.add-cart-btn.btn-block {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    background: #1E293B;
+    color: white;
+    text-align: center;
+    padding: 0.875rem;
+    text-transform: font-weight;
+    font-weight: 600;
+    font-size: 0.95rem;
+    border: none;
+    border-radius: 99px;
+    /* Pill shape */
+    transition: all 0.2s;
+    text-decoration: none;
+    cursor: pointer;
+    margin-top: auto;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.add-cart-btn.btn-block:hover {
+    background: #2563EB;
+    /* Bright blue on hover */
+    transform: translateY(-1px);
+    box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.2);
+}

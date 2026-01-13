@@ -1,0 +1,129 @@
+.upload-page {
+    background-color: white;
+}
+
+.upload-box-container {
+    max-width: 600px;
+    margin: 0 auto 4rem;
+}
+
+.upload-zone {
+    border: 2px dashed var(--border);
+    border-radius: 1rem;
+    padding: 3rem;
+    text-align: center;
+    background: #F8FAFC;
+    transition: all 0.2s;
+    cursor: pointer;
+}
+
+.upload-zone:hover {
+    border-color: var(--primary);
+    background: #F0F9FF;
+}
+
+.guide-section {
+    margin-bottom: 4rem;
+}
+
+.guide-icons {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    flex-wrap: wrap;
+}
+
+.g-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+.g-icon {
+    width: 50px;
+    height: 50px;
+    background: #E0F2FE;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+}
+
+.dos-donts-section {
+    margin-bottom: 4rem;
+}
+
+.dd-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.dd-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    font-weight: 500;
+}
+
+.dd-item.success {
+    background: #DCFCE7;
+    color: #166534;
+}
+
+.dd-item.error {
+    background: #FEE2E2;
+    color: #991B1B;
+}
+
+.how-it-works-section {
+    background: #0EA5E9;
+    color: white;
+    padding: 4rem 1rem;
+    border-radius: 1rem;
+    margin-bottom: 2rem;
+}
+
+.how-it-works-section h3 {
+    color: white;
+}
+
+.steps-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+    text-align: center;
+}
+
+.step-card p {
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+.step-num {
+    width: 40px;
+    height: 40px;
+    background: white;
+    color: #0EA5E9;
+    border-radius: 50%;
+    margin: 0 auto 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.2rem;
+}
+
+@media (max-width: 768px) {
+    .steps-grid {
+        grid-template-columns: 1fr;
+    }
+}

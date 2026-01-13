@@ -1,0 +1,249 @@
+.catalog-page {
+    background-color: #f8fafc;
+}
+
+.breadcrumbs {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    margin-bottom: 2rem;
+}
+
+.breadcrumbs .current {
+    color: var(--text);
+    font-weight: 500;
+}
+
+.cat-header {
+    background: #E0F2FE;
+    padding: 2.5rem;
+    text-align: center;
+    border-radius: 0.5rem;
+    margin-bottom: 3rem;
+}
+
+.cat-header h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0 0 1rem;
+    color: var(--primary-dark);
+}
+
+.cat-header p {
+    color: var(--text-muted);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.cat-layout {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 3rem;
+}
+
+/* Sidebar */
+.filter-group {
+    margin-bottom: 2rem;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 1.5rem;
+}
+
+.filter-group:last-child {
+    border-bottom: none;
+}
+
+.filter-group h4 {
+    margin: 0 0 1rem;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.fg-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    cursor: pointer;
+}
+
+.fg-header h4 {
+    margin: 0;
+}
+
+.filter-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.filter-list li {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    margin-bottom: 0.5rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.filter-list li:hover {
+    color: var(--primary);
+}
+
+.filter-list.tree .active {
+    font-weight: 600;
+    color: var(--primary);
+}
+
+.ml-2 {
+    margin-left: 0.5rem;
+}
+
+.ml-4 {
+    margin-left: 1rem;
+}
+
+.check-list input[type="checkbox"] {
+    accent-color: var(--primary);
+}
+
+.price-slider input {
+    width: 100%;
+}
+
+.price-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-top: 0.5rem;
+}
+
+.color-opts {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.c-dot {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid white;
+    box-shadow: 0 0 0 1px var(--border);
+}
+
+.c-dot:hover {
+    transform: scale(1.1);
+}
+
+/* Toolbar */
+.toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.toolbar-controls {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+}
+
+.sort-box select {
+    border: none;
+    background: transparent;
+    font-weight: 500;
+    cursor: pointer;
+    color: var(--text);
+    outline: none;
+    font-size: 0.95rem;
+}
+
+.view-mode {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.view-mode button {
+    background: white;
+    border: 1px solid var(--border);
+    padding: 0.4rem;
+    border-radius: 0.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+}
+
+.view-mode button.active {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: white;
+}
+
+/* Grid Override */
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 2rem;
+}
+
+/* Pagination */
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 4rem;
+}
+
+.page-btn {
+    width: 36px;
+    height: 36px;
+    border: 1px solid var(--border);
+    background: white;
+    border-radius: 0.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    transition: all 0.2s;
+}
+
+.page-btn:hover:not(.disabled) {
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+.page-btn.active {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: white;
+}
+
+.page-btn.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.dots {
+    display: flex;
+    align-items: center;
+    color: var(--text-muted);
+}
+
+@media (max-width: 900px) {
+    .cat-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .cat-sidebar {
+        display: none;
+        /* Hide sidebar on mobile for now, usually would be a drawer */
+    }
+}

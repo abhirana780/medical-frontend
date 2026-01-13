@@ -1,0 +1,253 @@
+.doctors-page {
+    background-color: #f8fafc;
+}
+
+.doctor-search-strip {
+    background: white;
+    padding: 1.5rem 0;
+    box-shadow: var(--shadow-sm);
+    margin-bottom: 2rem;
+}
+
+.search-inputs {
+    display: flex;
+    align-items: center;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    gap: 1rem;
+}
+
+.input-wrap {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0 1rem;
+    flex: 1;
+}
+
+.input-wrap.flex-2 {
+    flex: 2;
+}
+
+.input-wrap input {
+    border: none;
+    outline: none;
+    width: 100%;
+    font-size: 0.95rem;
+}
+
+.separator {
+    width: 1px;
+    height: 30px;
+    background: var(--border);
+}
+
+.search-go-btn {
+    padding: 0.75rem 2rem;
+}
+
+.layout-grid {
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+}
+
+.main-content {
+    flex: 3;
+}
+
+.sidebar {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.sort-filter {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.doctors-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.doctor-card {
+    background: white;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    border: 1px solid var(--border);
+    transition: all 0.2s;
+}
+
+.doctor-card:hover {
+    box-shadow: var(--shadow);
+    transform: translateY(-2px);
+}
+
+.doc-info-top {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.doc-img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.doc-details h3 {
+    margin: 0 0 0.25rem;
+    font-size: 1.1rem;
+}
+
+.doc-spec {
+    color: var(--primary);
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+}
+
+.doc-meta {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 0.25rem;
+}
+
+.availability-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    background: #ecfdf5;
+    color: #10b981;
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    margin-top: 0.5rem;
+}
+
+.doc-actions {
+    display: flex;
+    gap: 1rem;
+}
+
+.btn-block {
+    flex: 1;
+    font-size: 0.85rem;
+    padding: 0.5rem;
+}
+
+.sidebar-widget {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+    border: 1px solid var(--border);
+}
+
+.sidebar-widget.bg-light {
+    background: #F8FAFC;
+}
+
+.sidebar-widget.bg-blue-light {
+    background: #E0F2FE;
+}
+
+.sidebar-widget h4 {
+    margin: 0 0 1rem;
+    font-size: 1rem;
+}
+
+.info-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.info-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin-bottom: 0.75rem;
+}
+
+.link-row {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+    font-size: 0.85rem;
+}
+
+.link-row a {
+    color: var(--primary);
+    text-decoration: underline;
+}
+
+.promo-widget {
+    display: flex;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.promo-img {
+    width: 60px;
+    position: absolute;
+    right: -10px;
+    bottom: -10px;
+    opacity: 0.5;
+}
+
+.faq-row {
+    background: white;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    margin-bottom: 1rem;
+    border: 1px solid var(--border);
+}
+
+.faq-row p {
+    color: var(--text-muted);
+    margin-top: 0.5rem;
+    font-size: 0.95rem;
+}
+
+.faq-row-collapsed {
+    padding: 1rem;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    font-weight: 500;
+}
+
+@media (max-width: 968px) {
+    .layout-grid {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    .sidebar-widget {
+        flex: 1;
+        min-width: 250px;
+    }
+}
