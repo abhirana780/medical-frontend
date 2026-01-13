@@ -1,14 +1,19 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
 
 :root {
-  --primary: #2563EB; /* Royal Blue */
+  --primary: #2563EB;
+  /* Royal Blue */
   --primary-light: #60A5FA;
   --primary-dark: #1E40AF;
-  --secondary: #10B981; /* Emerald */
-  --bg: #F8FAFC; /* Slate 50 */
+  --secondary: #10B981;
+  /* Emerald */
+  --bg: #F8FAFC;
+  /* Slate 50 */
   --surface: #FFFFFF;
-  --text: #1E293B; /* Slate 800 */
-  --text-muted: #64748B; /* Slate 500 */
+  --text: #1E293B;
+  /* Slate 800 */
+  --text-muted: #64748B;
+  /* Slate 500 */
   --border: #E2E8F0;
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
   --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
@@ -25,6 +30,13 @@ body {
   background-color: var(--bg);
   color: var(--text);
   line-height: 1.5;
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+html {
+  overflow-x: hidden;
+  max-width: 100vw;
 }
 
 a {
@@ -82,10 +94,21 @@ button {
   padding: 4rem 0;
 }
 
-.text-center { text-align: center; }
-.mb-4 { margin-bottom: 1rem; }
-.mb-8 { margin-bottom: 2rem; }
-.mb-12 { margin-bottom: 3rem; }
+.text-center {
+  text-align: center;
+}
+
+.mb-4 {
+  margin-bottom: 1rem;
+}
+
+.mb-8 {
+  margin-bottom: 2rem;
+}
+
+.mb-12 {
+  margin-bottom: 3rem;
+}
 
 .grid-cols-4 {
   display: grid;
