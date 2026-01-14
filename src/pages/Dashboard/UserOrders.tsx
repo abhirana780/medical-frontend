@@ -69,7 +69,7 @@ const UserOrders = () => {
                         </div>
                         <div className="order-actions-right">
                             <span className="order-total-price">${order.totalPrice.toFixed(2)}</span>
-                            <Link to={`/account/orders/${order._id}`} className="btn btn-outline btn-sm">View Details</Link>
+                            <Link to={`/account/orders/${order._id}`} className="btn btn-outline btn-sm">Track & Review</Link>
                         </div>
                     </div>
                 ))}

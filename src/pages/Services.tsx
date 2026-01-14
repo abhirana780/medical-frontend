@@ -40,8 +40,8 @@ const servicesData = [
         description: "Share your experience with our products to help the community make informed choices.",
         icon: Zap,
         colorClass: "purple",
-        link: "/account/reviews",
-        btnText: "Write Review"
+        link: "/account/orders",
+        btnText: "Manage Reviews"
     },
     {
         title: "Professional Services",

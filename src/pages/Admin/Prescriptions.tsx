@@ -148,11 +148,18 @@ const Prescriptions = () => {
                         >
                             <X size={24} />
                         </button>
-                        <img
-                            src={selectedImage}
-                            alt="Prescription"
-                            className="w-full h-auto max-h-[80vh] object-contain rounded"
-                        />
+                        {selectedImage.includes('[object Object]') ? (
+                            <div className="p-8 text-center bg-red-50 text-red-500 rounded">
+                                <p><strong>Image Upload Error</strong></p>
+                                <p className="text-sm">This record was saved incorrectly. Please delete it and upload again.</p>
+                            </div>
+                        ) : (
+                            <img
+                                src={selectedImage.startsWith('http') ? selectedImage : `${(import.meta.env.VITE_API_URL || 'http://localhost:5000').replace(/\/$/, '')}/${selectedImage.replace(/^\/+/, '')}`}
+                                alt="Prescription"
+                                className="w-full h-auto max-h-[80vh] object-contain rounded"
+                            />
+                        )}
                     </div>
                 </div>
             )}

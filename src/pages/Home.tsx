@@ -8,11 +8,11 @@ import api from '../utils/api';
 import './Home.css';
 
 const categories = [
-    { name: 'Patient Aids', img: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?q=80&w=400&auto=format&fit=crop', id: 'patients' },
-    { name: 'Diabetic Supplies', img: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?q=80&w=400&auto=format&fit=crop', id: 'diabetic' },
-    { name: 'Orthopedic Braces', img: 'https://images.unsplash.com/photo-1552196563-55cd4e45efb3?q=80&w=400&auto=format&fit=crop', id: 'orthopedic' },
-    { name: 'Mobility', img: 'https://images.unsplash.com/photo-1584515933487-779824d29309?q=80&w=400&auto=format&fit=crop', id: 'mobility' },
-    { name: 'Wound Care', img: 'https://images.unsplash.com/photo-1628771065518-0d82f1938462?q=80&w=400&auto=format&fit=crop', id: 'wound-care' }
+    { name: 'Patient Aids', img: 'https://images.pexels.com/photos/263402/pexels-photo-263402.jpeg?auto=compress&cs=tinysrgb&w=600', id: 'patients' }, // Specific: Doctor/Patient Care
+    { name: 'Diabetic Supplies', img: 'https://images.pexels.com/photos/1001897/pexels-photo-1001897.jpeg?auto=compress&cs=tinysrgb&w=600', id: 'diabetic' }, // Specific: Glucometer/Testing
+    { name: 'Orthopedic Braces', img: 'https://images.pexels.com/photos/7298616/pexels-photo-7298616.jpeg?auto=compress&cs=tinysrgb&w=600', id: 'orthopedic' }, // Specific: PT/Rehab context
+    { name: 'Mobility', img: 'https://images.pexels.com/photos/4064230/pexels-photo-4064230.jpeg?auto=compress&cs=tinysrgb&w=600', id: 'mobility' }, // Verified Accessible Wheelchair Pexels Image
+    { name: 'Wound Care', img: 'https://images.pexels.com/photos/5407206/pexels-photo-5407206.jpeg?auto=compress&cs=tinysrgb&w=600', id: 'wound-care' } // Specific: Bandaging
 ];
 
 const Home = () => {
@@ -265,13 +265,20 @@ const Home = () => {
                                 flexDirection: 'column',
                                 boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.05)'
                             }}>
-                                <div style={{ height: '220px', overflow: 'hidden', position: 'relative' }}>
-                                    <img src={cat.img} alt={cat.name} style={{
-                                        width: '100%',
-                                        height: '100%',
-                                        objectFit: 'cover',
-                                        transition: 'transform 0.5s'
-                                    }} />
+                                <div style={{ height: '220px', overflow: 'hidden', position: 'relative', background: '#f8fafc' }}>
+                                    <img
+                                        src={cat.img}
+                                        alt={cat.name}
+                                        onError={(e) => {
+                                            e.currentTarget.src = `https://placehold.co/600x400/e2e8f0/1e293b?text=${cat.name.replace(' ', '+')}`;
+                                        }}
+                                        style={{
+                                            width: '100%',
+                                            height: '100%',
+                                            objectFit: 'cover',
+                                            transition: 'transform 0.5s'
+                                        }}
+                                    />
                                 </div>
                                 <div style={{ padding: '1.5rem 1rem' }}>
                                     <h3 style={{ fontSize: '1.25rem', margin: '0 0 0.5rem', fontWeight: 700, color: '#1E293B' }}>{cat.name}</h3>

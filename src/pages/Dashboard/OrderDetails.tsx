@@ -43,7 +43,7 @@ const OrderDetails = () => {
                     {!isDelivered && (
                         <Link to="/account/cancellation" className="btn btn-outline text-red" style={{ borderColor: '#fee2e2', color: '#dc2626' }}>Request Cancellation</Link>
                     )}
-                    <button className="btn btn-primary">Track Order</button>
+                    <Link to="/track-order" className="btn btn-primary">Track Order</Link>
                 </div>
             </div>
 
@@ -79,6 +79,15 @@ const OrderDetails = () => {
                                 <p style={{ fontWeight: '600' }}>${item.price.toFixed(2)}</p>
                             </div>
                         </div>
+                        {true && (
+                            <Link
+                                to={`/product/${item.product}?review=true`}
+                                className="btn btn-primary btn-sm"
+                                style={{ height: 'fit-content' }}
+                            >
+                                Write a Review
+                            </Link>
+                        )}
                     </div>
                 ))}
             </div>
@@ -101,13 +110,13 @@ const OrderDetails = () => {
                     </h4>
                     <div style={{ marginTop: '1rem', display: 'flex', flexDirection: 'column', gap: '0.5rem', fontSize: '0.9rem' }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                            <span>Subtotal</span><span>${itemsPrice.toFixed(2)}</span>
+                            <span>Subtotal</span><span>${(itemsPrice || 0).toFixed(2)}</span>
                         </div>
                         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                            <span>Shipping</span><span>${shippingPrice.toFixed(2)}</span>
+                            <span>Shipping</span><span>${(shippingPrice || 0).toFixed(2)}</span>
                         </div>
                         <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: 'bold', borderTop: '1px solid #ddd', paddingTop: '0.5rem' }}>
-                            <span>Total</span><span>${totalPrice.toFixed(2)}</span>
+                            <span>Total</span><span>${(totalPrice || 0).toFixed(2)}</span>
                         </div>
                         <div style={{ marginTop: '0.5rem', color: '#166534', fontSize: '0.8rem' }}>
                             Payment Method: {paymentMethod === 'credit-card' ? 'Credit Card' : paymentMethod.toUpperCase()}

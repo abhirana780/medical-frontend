@@ -1,0 +1,65 @@
+.timeline-horizontal {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.timeline-horizontal::before {
+    content: '';
+    position: absolute;
+    top: 20px;
+    /* Adjust based on icon size */
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: #e2e8f0;
+    z-index: 0;
+}
+
+.timeline-item {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    background: white;
+    /* To hide line behind icon if needed, or wrap icon in bg */
+    width: 33.33%;
+}
+
+.timeline-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #e2e8f0;
+    color: #64748B;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem;
+    border: 3px solid white;
+    /* Outline to separate from line */
+    transition: all 0.3s ease;
+}
+
+.timeline-item.active .timeline-icon {
+    background: var(--primary-light);
+    color: var(--primary);
+    border-color: var(--primary-light);
+}
+
+.timeline-item.completed .timeline-icon {
+    background: var(--primary);
+    color: white;
+}
+
+.timeline-content {
+    font-size: 0.9rem;
+    color: #64748B;
+}
+
+@media (max-width: 600px) {
+    .track-form {
+        grid-template-columns: 1fr !important;
+    }
+}

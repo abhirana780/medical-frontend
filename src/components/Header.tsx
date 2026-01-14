@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import { CATEGORIES } from '../data/categories';
+import toast from 'react-hot-toast';
 import './Header.css';
 
 const Header = () => {
@@ -15,12 +16,48 @@ const Header = () => {
     const { cartCount } = useCart();
     const { user, logout } = useAuth();
 
+
+    const [suggestions, setSuggestions] = useState<string[]>([]);
+    const [showSuggestions, setShowSuggestions] = useState(false);
+
+    // Suggestion logic
+    const handleSearchInput = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const query = e.target.value;
+        setSearchQuery(query);
+
+        if (query.length > 1) {
+            // Basic implementation: Filter from existing categories/subcategories or fetch from API
+            // For demo, we'll use a static list + categories. In production, call an API endpoint.
+            const allTerms = [
+                ...CATEGORIES.map(c => c.name),
+                ...CATEGORIES.flatMap(c => c.subcategories),
+                "Wheelchair", "Gloves", "Masks", "Oxygen", "Monitor", "Diabetes", "Tens Unit"
+            ];
+
+            const filtered = allTerms.filter(term =>
+                term.toLowerCase().includes(query.toLowerCase())
+            ).slice(0, 5); // Limit to 5
+
+            setSuggestions(Array.from(new Set(filtered))); // Remove duplicates
+            setShowSuggestions(true);
+        } else {
+            setShowSuggestions(false);
+        }
+    };
+
+    const handleSuggestionClick = (term: string) => {
+        setSearchQuery(term);
+        setShowSuggestions(false);
+        navigate(`/catalog?search=${encodeURIComponent(term)}`);
+    };
+
     const toggleSubMenu = (menu: any) => {
         setOpenSubMenu(openSubMenu === menu ? null : menu);
     };
 
     const handleSearch = (e: any) => {
         e.preventDefault();
+        setShowSuggestions(false);
         if (searchQuery.trim()) {
             navigate(`/catalog?search=${encodeURIComponent(searchQuery)}`);
         }
@@ -29,7 +66,8 @@ const Header = () => {
     const handleLogout = () => {
         logout();
         setUserMenuOpen(false);
-        navigate('/');
+        toast.success("Logged out successfully");
+        navigate('/login');
     };
 
     return (
@@ -104,18 +142,36 @@ const Header = () => {
                         <span className="logo-sub">Medical Supply</span>
                     </Link>
 
-                    <div className="search-container">
+                    <div className="search-container" style={{ position: 'relative' }}>
                         <form className="search-bar" onSubmit={handleSearch}>
                             <input
                                 type="text"
                                 placeholder="Search products (e.g. Wheelchair, Gloves)..."
                                 value={searchQuery}
-                                onChange={(e) => setSearchQuery(e.target.value)}
+                                onChange={handleSearchInput}
+                                onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
+                                onFocus={() => searchQuery.length > 1 && setShowSuggestions(true)}
                             />
                             <button type="submit" className="search-btn">
                                 <Search size={18} />
                             </button>
                         </form>
+
+                        {/* Search Suggestions Dropdown */}
+                        {showSuggestions && suggestions.length > 0 && (
+                            <div className="search-suggestions">
+                                {suggestions.map((term, idx) => (
+                                    <div
+                                        key={idx}
+                                        className="suggestion-item"
+                                        onMouseDown={() => handleSuggestionClick(term)} // onMouseDown fires before onBlur
+                                    >
+                                        <Search size={14} color="#94a3b8" />
+                                        <span>{term}</span>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
                     </div>
 
                     <div className="header-actions">
@@ -140,17 +196,20 @@ const Header = () => {
                         <Link to="/" className="nav-link">Home</Link>
 
                         {CATEGORIES.map((cat, index) => (
-                            <div className="nav-item-wrapper mega-menu-wrapper" key={index}>
+                            <div className="nav-item-wrapper" key={index}>
                                 <Link to={`/catalog?cat=${cat.name}`} className="nav-link">
-                                    {cat.name} <ChevronDown size={14} style={{ marginTop: 2 }} />
+                                    {cat.name} <ChevronDown size={14} style={{ marginTop: 2, opacity: 0.7 }} />
                                 </Link>
-                                <div className={`dropdown-menu mega-menu cols-4`}>
-                                    <div>
-                                        <div className="dropdown-section-title">Shop {cat.name}</div>
-                                        {cat.subcategories.map(sub => (
-                                            <Link key={sub} to={`/catalog?search=${sub}`} className="dropdown-item">{sub}</Link>
-                                        ))}
-                                    </div>
+                                <div className="dropdown-menu">
+                                    {cat.subcategories.map(sub => (
+                                        <Link key={sub} to={`/catalog?search=${sub}`} className="dropdown-item">
+                                            {sub}
+                                        </Link>
+                                    ))}
+                                    <div style={{ borderTop: '1px solid #f1f5f9', margin: '0.5rem 0' }}></div>
+                                    <Link to={`/catalog?cat=${cat.name}`} className="dropdown-item view-all-link">
+                                        View All {cat.name}
+                                    </Link>
                                 </div>
                             </div>
                         ))}

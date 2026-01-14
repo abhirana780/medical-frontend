@@ -26,11 +26,11 @@ const Profile = () => {
                 const { data } = await api.get('/api/auth/profile');
                 setFormData(prev => ({
                     ...prev,
-                    firstName: data.firstName || (data.name ? data.name.split(' ')[0] : ''),
-                    lastName: data.lastName || (data.name ? data.name.split(' ').slice(1).join(' ') : ''),
+                    firstName: data.firstName || '',
+                    lastName: data.lastName || '',
                     email: data.email || '',
                     phoneNumber: data.phoneNumber || '',
-                    dateOfBirth: data.dateOfBirth ? data.dateOfBirth.split('T')[0] : '', // Format for input type=date
+                    dateOfBirth: data.dateOfBirth ? data.dateOfBirth.split('T')[0] : '',
                     gender: data.gender || '',
                     height: data.height || '',
                     weight: data.weight || ''

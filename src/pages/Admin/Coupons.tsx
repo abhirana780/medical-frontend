@@ -65,90 +65,103 @@ const Coupons = () => {
     if (loading) return <div className="p-8"><Loading /></div>;
 
     return (
-        <div className="p-6">
+        <div>
             <div className="flex justify-between items-center mb-6">
                 <h1 className="text-2xl font-bold">Manage Coupons</h1>
                 <button
                     onClick={() => setIsCreating(!isCreating)}
-                    className="flex items-center gap-2 bg-primary text-white px-4 py-2 rounded shadow hover:bg-opacity-90 transition"
+                    className={isCreating ? "btn-cancel" : "btn-primary"}
                 >
                     {isCreating ? 'Cancel' : <><Plus size={18} /> Create New</>}
                 </button>
             </div>
 
             {isCreating && (
-                <div className="bg-gray-50 p-6 rounded-lg mb-8 border border-gray-200">
-                    <h3 className="font-semibold mb-4">Add New Coupon</h3>
-                    <form onSubmit={handleCreate} className="flex flex-wrap gap-4 items-end">
-                        <div className="flex-1 min-w-[200px]">
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Coupon Code</label>
+                <div className="coupon-form-card">
+                    <h3 className="form-header">Add New Coupon</h3>
+                    <form onSubmit={handleCreate} className="form-row">
+                        <div className="form-group" style={{ flex: 1 }}>
+                            <label className="form-label">Coupon Code</label>
                             <input
                                 type="text"
-                                className="w-full p-2 border rounded"
+                                className="form-input"
                                 placeholder="e.g. SUMMER20"
                                 value={formData.code}
                                 onChange={e => setFormData({ ...formData, code: e.target.value.toUpperCase() })}
                                 required
                             />
                         </div>
-                        <div className="w-[150px]">
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Discount (%)</label>
+                        <div className="form-group" style={{ width: '140px' }}>
+                            <label className="form-label">Discount (%)</label>
                             <input
                                 type="number"
                                 min="1" max="100"
-                                className="w-full p-2 border rounded"
+                                className="form-input"
                                 placeholder="20"
                                 value={formData.discountPercentage}
                                 onChange={e => setFormData({ ...formData, discountPercentage: e.target.value })}
                                 required
                             />
                         </div>
-                        <div className="w-[200px]">
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Expiry Date</label>
+                        <div className="form-group">
+                            <label className="form-label">Expiry Date</label>
                             <input
                                 type="date"
-                                className="w-full p-2 border rounded"
+                                className="form-input"
                                 value={formData.expiryDate}
                                 onChange={e => setFormData({ ...formData, expiryDate: e.target.value })}
                                 required
                             />
                         </div>
-                        <button type="submit" className="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 transition">
+                        <button type="submit" className="btn-primary" style={{ marginBottom: '2px' }}>
                             Save Coupon
                         </button>
                     </form>
                 </div>
             )}
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="admin-grid">
                 {coupons.map((coupon) => (
-                    <div key={coupon._id} className="bg-white border rounded-lg p-4 flex justify-between items-center shadow-sm">
-                        <div>
-                            <div className="flex items-center gap-2 mb-1">
-                                <Tag size={18} className="text-secondary" />
-                                <span className="font-bold text-lg text-secondary">{coupon.code}</span>
+                    <div key={coupon._id} className="premium-card group">
+                        <div className="card-decoration transition-transform group-hover:scale-110"></div>
+
+                        <div className="card-content">
+                            <div className="card-header-row">
+                                <div className="coupon-tag">
+                                    <Tag size={14} />
+                                    {coupon.code}
+                                </div>
+                                <button
+                                    onClick={() => handleDelete(coupon._id)}
+                                    className="text-gray-400 hover:text-red-500 transition-colors bg-transparent border-0 cursor-pointer p-0"
+                                >
+                                    <Trash2 size={18} />
+                                </button>
                             </div>
-                            <div className="text-2xl font-bold mb-1">{coupon.discountPercentage}% OFF</div>
-                            <div className="text-sm text-gray-500 flex items-center gap-1">
-                                <Calendar size={14} /> Expires: {new Date(coupon.expiryDate).toLocaleDateString()}
+
+                            <div className="coupon-discount">
+                                <div className="discount-amount">{coupon.discountPercentage}% <span style={{ fontSize: '1rem', color: '#64748B' }}>OFF</span></div>
+                                <span className="discount-label">Discount On All Products</span>
                             </div>
-                            <div className={`text-xs mt-2 px-2 py-0.5 rounded-full inline-block ${new Date(coupon.expiryDate) > new Date() ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
-                                {new Date(coupon.expiryDate) > new Date() ? 'Active' : 'Expired'}
+
+                            <div className="card-footer-row">
+                                <div className={`status-indicator ${new Date(coupon.expiryDate) > new Date() ? 'active' : 'expired'}`}>
+                                    <div className={`status-dot ${new Date(coupon.expiryDate) > new Date() ? 'active' : 'expired'}`}></div>
+                                    <span>{new Date(coupon.expiryDate) > new Date() ? 'Active' : 'Expired'}</span>
+                                </div>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', color: '#94A3B8' }}>
+                                    <Calendar size={14} />
+                                    <span>{new Date(coupon.expiryDate).toLocaleDateString()}</span>
+                                </div>
                             </div>
                         </div>
-                        <button
-                            onClick={() => handleDelete(coupon._id)}
-                            className="bg-red-50 text-red-500 p-2 rounded-full hover:bg-red-100 transition"
-                            title="Delete"
-                        >
-                            <Trash2 size={20} />
-                        </button>
                     </div>
                 ))}
 
                 {coupons.length === 0 && !isCreating && (
-                    <div className="col-span-full text-center py-12 text-gray-500">
-                        No coupons found. Create one to get started.
+                    <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '3rem', background: '#F8FAFC', borderRadius: '1rem', border: '2px dashed #E2E8F0', color: '#64748B' }}>
+                        <Tag size={48} style={{ margin: '0 auto 1rem auto', color: '#CBD5E1' }} />
+                        <p>No coupons found. Create one to get started.</p>
                     </div>
                 )}
             </div>
@@ -157,3 +170,4 @@ const Coupons = () => {
 };
 
 export default Coupons;
+

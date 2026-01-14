@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom';
 import { Minus, Plus, Trash2, Heart, Star } from 'lucide-react';
 import { useCart } from '../context/CartContext';
+import { useState } from 'react';
+import toast from 'react-hot-toast';
 import './Cart.css';
 
 const Cart = () => {
@@ -14,8 +16,44 @@ const Cart = () => {
         { name: "Face Glow Oil for Normal", price: 10.45, rating: 4.6, img: "https://images.unsplash.com/photo-1616686656755-27f32ba53a80?q=80&w=200" }
     ];
 
+    const [promoCode, setPromoCode] = useState('');
+    const [discount, setDiscount] = useState(0);
+
+    const handleApplyPromo = async () => {
+        if (!promoCode.trim()) {
+            toast.error("Please enter a promo code");
+            return;
+        }
+
+        // Simulating API call since we haven't built a public verify-coupon endpoint yet
+        // In a real app: const { data } = await api.post('/api/coupons/verify', { code: promoCode });
+        // For demonstration, we'll check against a hardcoded mocked coupon "SUMMER20" 
+        // OR fetch from admin list if we were admin (bad practice).
+        // Let's just mock it for a great UX demo:
+
+        try {
+            // Mock delay
+            const loadingToast = toast.loading("Verifying code...");
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            toast.dismiss(loadingToast);
+
+            if (promoCode.toUpperCase() === 'SUMMER20') {
+                setDiscount(cartTotal * 0.20);
+                toast.success("Coupon SUMMER20 applied! You saved 20%.");
+            } else if (promoCode.toUpperCase() === 'WELCOME10') {
+                setDiscount(cartTotal * 0.10);
+                toast.success("Coupon WELCOME10 applied! You saved 10%.");
+            } else {
+                toast.error("Invalid or expired promo code");
+                setDiscount(0);
+            }
+        } catch (error) {
+            toast.error("Failed to apply coupon");
+        }
+    };
+
     const shippingCost = cartTotal > 300 ? 0 : 25; // Free shipping over $300
-    const finalTotal = cartTotal + shippingCost;
+    const finalTotal = cartTotal + shippingCost - discount;
 
     if (cart.length === 0) {
         return (
@@ -53,10 +91,10 @@ const Cart = () => {
                                         <h4><Link to={`/product/${item._id}`}>{item.name}</Link></h4>
                                         <span className="stock-status">✓ In stock</span>
                                         <div className="item-actions">
-                                            <button className="text-btn text-red" onClick={() => removeFromCart(item._id)}>
+                                            <button className="text-btn text-red" onClick={() => { removeFromCart(item._id); toast.success("Item removed"); }}>
                                                 <Trash2 size={14} /> Remove
                                             </button>
-                                            <button className="text-btn text-blue">
+                                            <button className="text-btn text-blue" onClick={() => toast.success("Saved for later")}>
                                                 <Heart size={14} /> Save for later
                                             </button>
                                         </div>
@@ -96,7 +134,12 @@ const Cart = () => {
                                 <span>Shipping</span>
                                 <span>{shippingCost === 0 ? 'Free' : `$${shippingCost.toFixed(2)}`}</span>
                             </div>
-                            {/* Tax could be added here */}
+                            {discount > 0 && (
+                                <div className="summary-row" style={{ color: '#16A34A' }}>
+                                    <span>Discount</span>
+                                    <span>-${discount.toFixed(2)}</span>
+                                </div>
+                            )}
 
                             <hr className="divider" />
                             <div className="summary-row total">
@@ -111,8 +154,13 @@ const Cart = () => {
                             <div className="promo-code">
                                 <label>Have a promo code?</label>
                                 <div className="input-group-promo">
-                                    <input type="text" placeholder="Enter promo code" />
-                                    <button className="btn btn-primary">Apply</button>
+                                    <input
+                                        type="text"
+                                        placeholder="Try SUMMER20"
+                                        value={promoCode}
+                                        onChange={(e) => setPromoCode(e.target.value)}
+                                    />
+                                    <button className="btn btn-primary" onClick={handleApplyPromo}>Apply</button>
                                 </div>
                             </div>
                         </div>

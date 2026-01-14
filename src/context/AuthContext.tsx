@@ -26,7 +26,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const logout = () => {
         setUser(null);
         localStorage.removeItem('user');
-        window.location.href = '/login';
+        // Do not force reload, let the component handle navigation
     };
 
     const login = (userData: User) => {

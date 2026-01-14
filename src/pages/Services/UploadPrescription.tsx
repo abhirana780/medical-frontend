@@ -39,7 +39,7 @@ const UploadPrescription = () => {
                 headers: { 'Content-Type': 'multipart/form-data' }
             });
 
-            const imageUrl = `${import.meta.env.VITE_API_URL}${uploadRes.data}`;
+            const imageUrl = uploadRes.data.image;
 
             // 2. Create Prescription Record
             await api.post('/api/prescriptions', { imageUrl });

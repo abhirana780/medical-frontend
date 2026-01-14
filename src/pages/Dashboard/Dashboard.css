@@ -277,6 +277,7 @@ textarea.cancel-comment {
     padding: 2rem;
 }
 
+
 .check-big {
     width: 64px;
     height: 64px;
@@ -287,4 +288,151 @@ textarea.cancel-comment {
     align-items: center;
     justify-content: center;
     margin: 0 auto 1.5rem;
+}
+
+
+/* Responsive Dashboard */
+@media (max-width: 992px) {
+    .dashboard-layout {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .dashboard-sidebar {
+        margin-bottom: 1rem;
+    }
+
+    .user-profile-summary {
+        display: none;
+        /* Hide large profile summary on mobile to save space, or make it compact */
+    }
+
+    .dash-menu {
+        display: flex;
+        overflow-x: auto;
+        gap: 0.5rem;
+        padding-bottom: 0.5rem;
+        scrollbar-width: thin;
+        /* Firefox */
+    }
+
+    .dash-menu::-webkit-scrollbar {
+        height: 4px;
+    }
+
+    .dash-menu::-webkit-scrollbar-thumb {
+        background: #cbd5e1;
+        border-radius: 4px;
+    }
+
+    .dash-menu li {
+        margin-bottom: 0;
+        flex-shrink: 0;
+    }
+
+    .dash-menu a {
+        background: #f1f5f9;
+        white-space: nowrap;
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+    }
+
+    .dash-menu a.active {
+        background: var(--primary);
+        color: white;
+    }
+}
+
+@media (max-width: 640px) {
+    .dashboard-content {
+        padding: 1rem;
+    }
+
+    /* Order Cards Responsive */
+    .order-card-row {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1.25rem;
+        padding: 1rem;
+    }
+
+    .order-info-left {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .order-thumbs-stack {
+        margin-bottom: 0.5rem;
+    }
+
+    .order-actions-right {
+        text-align: left;
+        padding-top: 1rem;
+        border-top: 1px solid var(--border);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .order-total-price {
+        margin-bottom: 0;
+    }
+
+    /* Address Grid */
+    .address-grid {
+        grid-template-columns: 1fr;
+    }
+
+    /* Timeline Vertical conversion for small screens */
+    .timeline {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0;
+        margin-left: 1rem;
+        padding-left: 1.5rem;
+        border-left: 2px solid #e2e8f0;
+    }
+
+    .timeline::before {
+        display: none;
+        /* Remove horizontal line */
+    }
+
+    .timeline-step {
+        text-align: left;
+        display: flex;
+        align-items: center;
+        /* Align dot with text */
+        gap: 1rem;
+        padding: 0;
+        margin-bottom: 1.5rem;
+        background: transparent;
+        width: 100%;
+        position: relative;
+    }
+
+    .step-dot {
+        margin: 0;
+        /* Position dot on the line */
+        position: absolute;
+        left: -2.5rem;
+        /* Adjust based on padding/border */
+        width: 24px;
+        height: 24px;
+        font-size: 0.75rem;
+    }
+
+    /* Adjust for active state border */
+    .timeline-step.active .step-dot {
+        width: 24px;
+        height: 24px;
+        border-width: 3px;
+    }
+
+    /* Settings/Cancellation inputs */
+    .reason-select,
+    textarea.cancel-comment {
+        width: 100%;
+    }
 }

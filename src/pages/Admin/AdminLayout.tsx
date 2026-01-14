@@ -1,12 +1,18 @@
-import { Outlet, Link, useLocation, Navigate } from 'react-router-dom';
-import { LayoutDashboard, Package, ShoppingBag, Users, LogOut, FileText, MessageSquare, Tag } from 'lucide-react';
+import { Outlet, Link, useLocation, Navigate, useNavigate } from 'react-router-dom';
+import { LayoutDashboard, Package, ShoppingBag, Users, LogOut, FileText, MessageSquare, Tag, ClipboardList } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import './Admin.css';
 
 const AdminLayout = () => {
-    const { user, isLoading } = useAuth();
+    const { user, isLoading, logout } = useAuth();
     const location = useLocation();
+    const navigate = useNavigate();
     const isActive = (path: string) => location.pathname === path;
+
+    const handleLogout = () => {
+        logout();
+        navigate('/login');
+    };
 
     if (isLoading) return null;
     if (!user || !user.isAdmin) return <Navigate to="/" replace />;
@@ -26,6 +32,9 @@ const AdminLayout = () => {
                     <Link to="/admin/products" className={`admin-nav-item ${isActive('/admin/products') ? 'active' : ''}`}>
                         <Package size={20} /> Products
                     </Link>
+                    <Link to="/admin/inventory" className={`admin-nav-item ${isActive('/admin/inventory') ? 'active' : ''}`}>
+                        <ClipboardList size={20} /> Bulk Inventory
+                    </Link>
                     <Link to="/admin/orders" className={`admin-nav-item ${isActive('/admin/orders') ? 'active' : ''}`}>
                         <ShoppingBag size={20} /> Orders
                     </Link>
@@ -44,9 +53,13 @@ const AdminLayout = () => {
                 </nav>
 
                 <div style={{ marginTop: 'auto', paddingTop: '1rem', borderTop: '1px solid var(--border)' }}>
-                    <Link to="/login" className="admin-nav-item" style={{ color: '#EF4444' }}>
+                    <button
+                        onClick={handleLogout}
+                        className="admin-nav-item"
+                        style={{ color: '#EF4444', width: '100%', background: 'none', border: 'none', cursor: 'pointer', textAlign: 'left', fontSize: '1rem' }}
+                    >
                         <LogOut size={20} /> Logout
-                    </Link>
+                    </button>
                 </div>
             </aside>
 

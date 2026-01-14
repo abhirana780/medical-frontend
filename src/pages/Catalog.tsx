@@ -6,6 +6,8 @@ import api from '../utils/api';
 import { CATEGORIES } from '../data/categories';
 import './Catalog.css';
 
+const BRANDS = ["Generic", "Omron", "Philips", "3M", "Nidek", "ResMed"];
+
 const Catalog = () => {
     const [searchParams] = useSearchParams();
     const searchQuery = searchParams.get('search');
@@ -14,43 +16,72 @@ const Catalog = () => {
     const [products, setProducts] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
 
+    // Filters
+    const [sortOption, setSortOption] = useState('');
+    const [priceRange, setPriceRange] = useState([0, 5000]);
+    const [inStockOnly, setInStockOnly] = useState(false);
+    const [selectedBrand, setSelectedBrand] = useState('');
+    const [minRating, setMinRating] = useState(0);
+
+    // UI State
+    const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+
+
+    // Polling Logic
     useEffect(() => {
-        const fetchProducts = async () => {
-            setLoading(true);
+        let isMounted = true;
+
+        const fetchProducts = async (isBackground = false) => {
+            if (!isBackground) setLoading(true);
             try {
-                // In a real app we might pass query params to the API: /api/products?search=...
-                // For now, we fetch all and filter client-side as per current backend capabilities
-                const res = await api.get('/api/products');
-                let data = res.data;
+                let url = '/api/products?';
 
-                if (searchQuery) {
-                    const lowerQuery = searchQuery.toLowerCase();
-                    data = data.filter((p: any) =>
-                        p.name.toLowerCase().includes(lowerQuery) ||
-                        (p.description && p.description.toLowerCase().includes(lowerQuery)) ||
-                        (p.category && p.category.toLowerCase().includes(lowerQuery))
-                    );
+                if (searchQuery) url += `search=${searchQuery}&`;
+                if (categoryQuery) url += `category=${categoryQuery}&`;
+
+                if (sortOption) url += `sort=${sortOption}&`;
+                if (inStockOnly) url += `inStock=true&`;
+                if (selectedBrand) url += `brand=${encodeURIComponent(selectedBrand)}&`;
+                if (minRating > 0) url += `rating=${minRating}&`;
+
+                if (priceRange[1] < 5000) {
+                    url += `minPrice=${priceRange[0]}&maxPrice=${priceRange[1]}&`;
                 }
 
-                if (categoryQuery) {
-                    const lowerCat = categoryQuery.toLowerCase();
-                    data = data.filter((p: any) =>
-                        p.category && p.category.toLowerCase().includes(lowerCat)
-                    );
-                }
-
-                setProducts(data);
+                const res = await api.get(url);
+                if (isMounted) setProducts(res.data);
             } catch (err) {
                 console.error("Error fetching products:", err);
             } finally {
-                setLoading(false);
+                if (!isBackground && isMounted) setLoading(false);
             }
         };
 
+        // Initial fetch
         fetchProducts();
-    }, [searchQuery, categoryQuery]);
+
+        // Poll every 5 seconds for updates
+        const intervalId = setInterval(() => {
+            fetchProducts(true); // background fetch
+        }, 5000);
+
+        return () => {
+            isMounted = false;
+            clearInterval(intervalId);
+        };
+    }, [searchQuery, categoryQuery, sortOption, inStockOnly, priceRange, selectedBrand, minRating]);
+
 
     const pageTitle = searchQuery ? `Search Results for "${searchQuery}"` : (categoryQuery ? `${categoryQuery.charAt(0).toUpperCase() + categoryQuery.slice(1)} Products` : 'Full Catalog');
+
+    // Reset all filters
+    const clearFilters = () => {
+        setPriceRange([0, 5000]);
+        setInStockOnly(false);
+        setSortOption('');
+        setSelectedBrand('');
+        setMinRating(0);
+    };
 
     return (
         <div className="catalog-page section">
@@ -75,10 +106,70 @@ const Catalog = () => {
                                 <li><Link to="/catalog">All Products</Link></li>
                                 {CATEGORIES.map((cat) => (
                                     <li key={cat.name} className="ml-2">
-                                        <Link to={`/catalog?cat=${cat.name}`}>{cat.name}</Link>
+                                        <Link to={`/catalog?cat=${cat.name}`} className={categoryQuery === cat.name ? 'active-cat' : ''}>
+                                            {cat.name}
+                                        </Link>
                                     </li>
                                 ))}
                             </ul>
+                        </div>
+
+                        <div className="filter-group">
+                            <div className="fg-header">
+                                <h4>Availability</h4>
+                            </div>
+                            <label className="flex items-center gap-2" style={{ cursor: 'pointer', marginTop: '0.5rem' }}>
+                                <input
+                                    type="checkbox"
+                                    checked={inStockOnly}
+                                    onChange={(e) => setInStockOnly(e.target.checked)}
+                                />
+                                In Stock Only
+                            </label>
+                        </div>
+
+                        <div className="filter-group">
+                            <div className="fg-header"><h4>Brand</h4></div>
+                            <select
+                                className="form-control"
+                                style={{ width: '100%', marginTop: '0.5rem', padding: '0.5rem' }}
+                                value={selectedBrand}
+                                onChange={(e) => setSelectedBrand(e.target.value)}
+                            >
+                                <option value="">All Brands</option>
+                                {BRANDS.map(b => (
+                                    <option key={b} value={b}>{b}</option>
+                                ))}
+                            </select>
+                        </div>
+
+                        <div className="filter-group">
+                            <div className="fg-header"><h4>Rating</h4></div>
+                            <div className="rating-filter" style={{ marginTop: '0.5rem' }}>
+                                {[4, 3, 2, 1].map((star) => (
+                                    <label key={star} className="flex items-center gap-2" style={{ cursor: 'pointer', marginBottom: '0.25rem' }}>
+                                        <input
+                                            type="radio"
+                                            name="rating"
+                                            checked={minRating === star}
+                                            onChange={() => setMinRating(star)}
+                                        />
+                                        <span style={{ display: 'flex', color: '#fbbf24', fontSize: '0.9rem' }}>
+                                            {"★".repeat(star)}{"☆".repeat(5 - star)}
+                                        </span>
+                                        <span style={{ fontSize: '0.8rem', color: '#64748B' }}>& Up</span>
+                                    </label>
+                                ))}
+                                <label className="flex items-center gap-2" style={{ cursor: 'pointer' }}>
+                                    <input
+                                        type="radio"
+                                        name="rating"
+                                        checked={minRating === 0}
+                                        onChange={() => setMinRating(0)}
+                                    />
+                                    <span style={{ fontSize: '0.9rem' }}>Any Rating</span>
+                                </label>
+                            </div>
                         </div>
 
                         <div className="filter-group">
@@ -87,13 +178,25 @@ const Catalog = () => {
                                 <ChevronDown size={16} />
                             </div>
                             <div className="price-slider">
-                                <input type="range" min="0" max="2000" />
-                                <div className="price-labels">
-                                    <span>$0</span>
-                                    <span>$2000+</span>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem', fontSize: '0.9rem' }}>
+                                    <span>${priceRange[0]}</span>
+                                    <span>${priceRange[1]}+</span>
                                 </div>
+                                <input
+                                    type="range"
+                                    min="0"
+                                    max="5000"
+                                    step="50"
+                                    value={priceRange[1]}
+                                    onChange={(e) => setPriceRange([0, parseInt(e.target.value)])}
+                                    style={{ width: '100%' }}
+                                />
                             </div>
                         </div>
+
+                        <button onClick={clearFilters} className="btn btn-outline btn-sm" style={{ width: '100%', marginTop: '1rem' }}>
+                            Reset Filters
+                        </button>
                     </aside>
 
                     {/* Main Content */}
@@ -103,31 +206,50 @@ const Catalog = () => {
                             <div className="toolbar-controls">
                                 <div className="sort-box">
                                     <span>Sort by: </span>
-                                    <select>
-                                        <option>Best Match</option>
-                                        <option>Price: Low to High</option>
-                                        <option>Price: High to Low</option>
+                                    <select value={sortOption} onChange={(e) => setSortOption(e.target.value)}>
+                                        <option value="">Best Match</option>
+                                        <option value="newest">Newest Arrivals</option>
+                                        <option value="priceAsc">Price: Low to High</option>
+                                        <option value="priceDesc">Price: High to Low</option>
                                     </select>
                                 </div>
                                 <div className="view-mode">
-                                    <button className="active"><Grid size={18} /></button>
-                                    <button><List size={18} /></button>
+                                    <button
+                                        className={viewMode === 'grid' ? 'active' : ''}
+                                        onClick={() => setViewMode('grid')}>
+                                        <Grid size={18} />
+                                    </button>
+                                    <button
+                                        className={viewMode === 'list' ? 'active' : ''}
+                                        onClick={() => setViewMode('list')}>
+                                        <List size={18} />
+                                    </button>
                                 </div>
                             </div>
                         </div>
 
                         {loading ? (
-                            <div style={{ textAlign: 'center', padding: '4rem' }}>Loading products...</div>
+                            <div style={{ textAlign: 'center', padding: '4rem' }}>
+                                <div className="spinner"></div>
+                                <p style={{ marginTop: '1rem' }}>Loading products...</p>
+                            </div>
                         ) : products.length > 0 ? (
-                            <div className="grid-cols-3 product-grid">
+                            <div className={viewMode === 'grid' ? "grid-cols-3 product-grid" : "list-view product-list"}>
                                 {products.map(p => (
-                                    <ProductCard key={p._id} product={p} />
+                                    <ProductCard key={p._id} product={p} viewMode={viewMode} />
                                 ))}
                             </div>
                         ) : (
-                            <div style={{ textAlign: 'center', padding: '4rem', color: '#64748B' }}>
+                            <div style={{ textAlign: 'center', padding: '4rem', color: '#64748B', background: '#F8FAFC', borderRadius: '1rem' }}>
                                 <h3>No products found.</h3>
-                                <p>Try adjusting your search or filters.</p>
+                                <p>Try adjusting your filters or search query.</p>
+                                <button
+                                    onClick={clearFilters}
+                                    className="btn btn-outline"
+                                    style={{ marginTop: '1rem' }}
+                                >
+                                    Clear Filters
+                                </button>
                             </div>
                         )}
 

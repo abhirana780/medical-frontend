@@ -19,6 +19,7 @@ import Wishlist from './pages/Dashboard/Wishlist';
 import Cancellation from './pages/Dashboard/Cancellation';
 import MedicalHistory from './pages/Dashboard/MedicalHistory';
 import Notifications from './pages/Dashboard/Notifications';
+import UserReviews from './pages/Dashboard/UserReviews';
 import Settings from './pages/Dashboard/Settings';
 
 import Register from './pages/Auth/Register';
@@ -26,6 +27,8 @@ import Services from './pages/Services';
 import UploadPrescription from './pages/Services/UploadPrescription';
 import Inquiry from './pages/Inquiry';
 import ReviewProduct from './pages/ReviewProduct';
+import TrackOrder from './pages/TrackOrder';
+import ChatBot from './components/ChatBot';
 import NotFound from './pages/Errors/NotFound';
 import ServerError from './pages/Errors/ServerError';
 
@@ -38,6 +41,7 @@ import Users from './pages/Admin/Users';
 import Prescriptions from './pages/Admin/Prescriptions';
 import Inquiries from './pages/Admin/Inquiries';
 import Coupons from './pages/Admin/Coupons';
+import BulkInventory from './pages/Admin/BulkInventory';
 
 import SavedCards from './pages/Dashboard/SavedCards';
 import ShippingPolicy from './pages/ShippingPolicy';
@@ -48,6 +52,7 @@ import AdminRoute from './components/AdminRoute';
 
 import { CartProvider } from './context/CartContext';
 import { AuthProvider } from './context/AuthContext';
+import { WishlistProvider } from './context/WishlistContext';
 
 const AppContent = () => {
   const location = useLocation();
@@ -76,6 +81,7 @@ const AppContent = () => {
           <Route path="/inquiry" element={<Inquiry />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/track-order" element={<TrackOrder />} />
           <Route path="/review-product" element={<ReviewProduct />} />
 
           {/* Error Pages */}
@@ -94,6 +100,7 @@ const AppContent = () => {
               <Route path="cancellation" element={<Cancellation />} />
               <Route path="cards" element={<SavedCards />} />
               <Route path="notifications" element={<Notifications />} />
+              <Route path="reviews" element={<UserReviews />} />
               <Route path="settings" element={<Settings />} />
             </Route>
           </Route>
@@ -107,6 +114,7 @@ const AppContent = () => {
               <Route path="products/edit/:id" element={<ProductForm />} />
               <Route path="orders" element={<AdminOrders />} />
               <Route path="users" element={<Users />} />
+              <Route path="inventory" element={<BulkInventory />} />
               <Route path="prescriptions" element={<Prescriptions />} />
               <Route path="inquiries" element={<Inquiries />} />
               <Route path="coupons" element={<Coupons />} />
@@ -117,17 +125,23 @@ const AppContent = () => {
         </Routes>
       </main>
       {!isAdminRoute && <Footer />}
+      <ChatBot />
     </div>
   );
 };
+
+import { Toaster } from 'react-hot-toast';
 
 function App() {
   return (
     <AuthProvider>
       <CartProvider>
-        <Router>
-          <AppContent />
-        </Router>
+        <WishlistProvider>
+          <Router>
+            <Toaster position="top-center" reverseOrder={false} />
+            <AppContent />
+          </Router>
+        </WishlistProvider>
       </CartProvider>
     </AuthProvider>
   );
