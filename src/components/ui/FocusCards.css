@@ -1,0 +1,29 @@
+.focus-card {
+    cursor: pointer;
+    user-select: none;
+}
+
+/* Ensure images don't have weird spacing */
+.focus-card img {
+    display: block;
+}
+
+/* Optional: add a container for responsive grid if not using inline */
+.focus-cards-container {
+    display: grid;
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+    gap: 2.5rem;
+    max-width: 80rem;
+    /* 5xl */
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    width: 100%;
+}
+
+@media (min-width: 768px) {
+    .focus-cards-container {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
