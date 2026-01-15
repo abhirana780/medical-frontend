@@ -127,6 +127,9 @@ const Footer = () => {
                     <p>&copy; {currentYear} Scott's Medical Supply. All Rights Reserved.</p>
                     <p className="powered-by">
                         Powered by <span className="highlight-text">Wipronix Technologies</span>
+                        <br />
+                        For Enquiry Contact <span className="highlight-text">info@wipronix.com</span>
+
                     </p>
                 </div>
             </div>

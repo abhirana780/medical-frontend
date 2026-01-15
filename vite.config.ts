@@ -10,4 +10,10 @@ export default defineConfig({
       },
     }),
   ],
+  optimizeDeps: {
+    include: ['@react-pdf/renderer'],
+  },
+  define: {
+    'process.env': {},
+  },
 })

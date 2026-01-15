@@ -137,7 +137,7 @@ const AdminDashboard = () => {
                                     contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)' }}
                                 />
                                 <Bar dataKey="count" radius={[6, 6, 0, 0]} barSize={40}>
-                                    {entityData.map((entry, index) => (
+                                    {entityData.map((_, index) => (
                                         <Cell key={`cell-${index}`} fill={['#6366F1', '#10B981', '#F59E0B'][index % 3]} />
                                     ))}
                                 </Bar>

@@ -147,7 +147,7 @@ const Catalog = () => {
                             <div className="fg-header"><h4>Rating</h4></div>
                             <div className="rating-filter" style={{ marginTop: '0.5rem' }}>
                                 {[4, 3, 2, 1].map((star) => (
-                                    <label key={star} className="flex items-center gap-2" style={{ cursor: 'pointer', marginBottom: '0.25rem' }}>
+                                    <label key={star} className="rating-item">
                                         <input
                                             type="radio"
                                             name="rating"
@@ -160,14 +160,14 @@ const Catalog = () => {
                                         <span style={{ fontSize: '0.8rem', color: '#64748B' }}>& Up</span>
                                     </label>
                                 ))}
-                                <label className="flex items-center gap-2" style={{ cursor: 'pointer' }}>
+                                <label className="rating-item">
                                     <input
                                         type="radio"
                                         name="rating"
                                         checked={minRating === 0}
                                         onChange={() => setMinRating(0)}
                                     />
-                                    <span style={{ fontSize: '0.9rem' }}>Any Rating</span>
+                                    <span style={{ fontSize: '0.9rem', color: '#475569' }}>Any Rating</span>
                                 </label>
                             </div>
                         </div>

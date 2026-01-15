@@ -1,7 +1,6 @@
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js';
-import api from '../utils/api';
 
 interface PaymentFormProps {
     amount: number;

@@ -1,52 +1,31 @@
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Quote, Star, CheckCircle2 } from 'lucide-react';
-
-const testimonials = [
-    {
-        name: "John Doe",
-        role: "Diabetes Patient",
-        quote: "The glucose monitor I bought from Scott's Medical is a complete lifesaver. It's accurate, easy to use, and the support team helped me set it up. Highly recommended for anyone tracking their sugar levels.",
-        img: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?q=80&w=200&auto=format&fit=crop",
-        rating: 5
-    },
-    {
-        name: "Sarah Smith",
-        role: "Caregiver",
-        quote: "Excellent service and incredibly fast shipping. The wheelchair arrived in perfect condition and has significantly improved my father's mobility. The quality of equipment here is unmatched.",
-        img: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=200&auto=format&fit=crop",
-        rating: 5
-    },
-    {
-        name: "Dr. James Wilson",
-        role: "Physician",
-        quote: "I've been recommending Scott's Medical Supply for years. Their commitment to providing reliable, medical-grade equipment is consistent. They are a trusted partner in Grenada's healthcare.",
-        img: "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?q=80&w=200&auto=format&fit=crop",
-        rating: 5
-    },
-    {
-        name: "Emily Rodriguez",
-        role: "Physical Therapist",
-        quote: "The quality of orthopedic braces available here is exceptional. My patients have seen faster recovery times thanks to the professional-grade support provided by these products.",
-        img: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=200&auto=format&fit=crop",
-        rating: 5
-    },
-    {
-        name: "Robert Fox",
-        role: "Home Health Aide",
-        quote: "Ordering supplies for my clients has never been easier. The website is intuitive, and the recurring order feature ensures we never run out of critical medical supplies. Great team!",
-        img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=200&auto=format&fit=crop",
-        rating: 5
-    },
-    {
-        name: "Lisa Chen",
-        role: "Post-Op Recovery",
-        quote: "After my surgery, I needed specific equipment at home. Scott's Medical delivered everything the next day and even helped with the assembly. Truly exceptional customer service.",
-        img: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=200&auto=format&fit=crop",
-        rating: 5
-    }
-];
+import api from '../utils/api';
 
 const Testimonials = () => {
+    const [reviews, setReviews] = useState<any[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchReviews = async () => {
+            try {
+                const res = await api.get('/api/products/reviews/top');
+                setReviews(res.data);
+            } catch (error) {
+                console.error("Error fetching reviews", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchReviews();
+    }, []);
+
+    if (loading) return null; // Or a skeleton/loader
+
+    if (reviews.length === 0) return null;
+
     return (
         <section style={{ background: '#F8FAFC', padding: '100px 0', position: 'relative', overflow: 'hidden' }}>
             {/* Soft Background Blurs */}
@@ -68,10 +47,10 @@ const Testimonials = () => {
                             <CheckCircle2 size={16} /> Verified Patient Stories
                         </span>
                         <h2 style={{ fontSize: '3rem', fontWeight: 800, color: '#0F172A', marginBottom: '1.25rem', letterSpacing: '-0.03em' }}>
-                            Trusted by More Than <span style={{ color: '#2563EB' }}>5,000+</span> Customers
+                            Trusted by Our <span style={{ color: '#2563EB' }}>Customers</span>
                         </h2>
                         <p style={{ color: '#64748B', fontSize: '1.25rem', maxWidth: '700px', margin: '0 auto', lineHeight: 1.6 }}>
-                            We pride ourselves on providing the highest quality medical supplies and equipment to the Caribbean community.
+                            Real feedback from our community.
                         </p>
                     </motion.div>
                 </div>
@@ -81,7 +60,7 @@ const Testimonials = () => {
                     gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))',
                     gap: '2rem'
                 }}>
-                    {testimonials.map((t, idx) => (
+                    {reviews.map((t, idx) => (
                         <motion.div
                             key={idx}
                             initial={{ opacity: 0, scale: 0.95 }}
@@ -127,13 +106,13 @@ const Testimonials = () => {
                                 zIndex: 1,
                                 flexGrow: 1
                             }}>
-                                "{t.quote}"
+                                "{t.comment}"
                             </p>
 
                             <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', borderTop: '1px solid #F1F5F9', paddingTop: '1.5rem' }}>
                                 <div style={{ position: 'relative' }}>
                                     <img
-                                        src={t.img}
+                                        src={`https://ui-avatars.com/api/?name=${t.name}&background=random`}
                                         alt={t.name}
                                         style={{ width: '56px', height: '56px', borderRadius: '50%', objectFit: 'cover', border: '2px solid white', boxShadow: '0 0 0 2px #EFF6FF' }}
                                     />
@@ -149,7 +128,9 @@ const Testimonials = () => {
                                 </div>
                                 <div>
                                     <h4 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 700, color: '#0F172A' }}>{t.name}</h4>
-                                    <span style={{ fontSize: '0.875rem', color: '#64748B', fontWeight: 500 }}>{t.role}</span>
+                                    <span style={{ fontSize: '0.875rem', color: '#64748B', fontWeight: 500 }}>
+                                        {t.productName ? `Reviewed: ${t.productName.substring(0, 30)}${t.productName.length > 30 ? '...' : ''}` : 'Verified Customer'}
+                                    </span>
                                 </div>
                             </div>
                         </motion.div>

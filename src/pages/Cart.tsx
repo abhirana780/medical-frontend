@@ -3,6 +3,7 @@ import { Minus, Plus, Trash2, Heart, Star } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
+import { FreeShippingBar } from '../components/ui/FreeShippingBar';
 import './Cart.css';
 
 const Cart = () => {
@@ -75,6 +76,8 @@ const Cart = () => {
                 <div className="cart-layout">
                     {/* Left Column: Items */}
                     <div className="cart-main">
+                        <FreeShippingBar currentAmount={cartTotal} threshold={300} />
+
                         <div className="cart-list-header">
                             <h3>{cart.length} items in your cart</h3>
                         </div>

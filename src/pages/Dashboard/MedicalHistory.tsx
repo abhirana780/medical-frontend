@@ -80,10 +80,6 @@ Scott's Medical Supply
                     </tbody>
                 </table>
             </div>
-            <div style={{ marginTop: '2rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <input type="checkbox" id="share-history" />
-                <label htmlFor="share-history" style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>Share my medical history</label>
-            </div>
         </div>
     );
 };

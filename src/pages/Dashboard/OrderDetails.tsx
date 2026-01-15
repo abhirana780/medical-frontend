@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { MapPin, CreditCard, Undo2 } from 'lucide-react';
+import { usePDF } from '@react-pdf/renderer';
+import InvoicePDF from '../../components/InvoicePDF';
+import { MapPin, CreditCard, Undo2, Download } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import api from '../../utils/api';
 
@@ -17,7 +19,7 @@ const OrderDetails = () => {
                 const { data } = await api.get(`/api/orders/${id}`);
                 setOrder(data);
             } catch (err: any) {
-                setError('Failed to fetch order details');
+                setError(err.response?.data?.message || 'Failed to fetch order details');
                 console.error(err);
             } finally {
                 setLoading(false);
@@ -44,6 +46,8 @@ const OrderDetails = () => {
                         <Link to="/account/cancellation" className="btn btn-outline text-red" style={{ borderColor: '#fee2e2', color: '#dc2626' }}>Request Cancellation</Link>
                     )}
                     <Link to="/track-order" className="btn btn-primary">Track Order</Link>
+
+                    <InvoiceDownloadButton order={order} />
                 </div>
             </div>
 
@@ -79,15 +83,13 @@ const OrderDetails = () => {
                                 <p style={{ fontWeight: '600' }}>${item.price.toFixed(2)}</p>
                             </div>
                         </div>
-                        {true && (
-                            <Link
-                                to={`/product/${item.product}?review=true`}
-                                className="btn btn-primary btn-sm"
-                                style={{ height: 'fit-content' }}
-                            >
-                                Write a Review
-                            </Link>
-                        )}
+                        <Link
+                            to={`/product/${item.product}?review=true`}
+                            className="btn btn-primary btn-sm"
+                            style={{ height: 'fit-content' }}
+                        >
+                            Write a Review
+                        </Link>
                     </div>
                 ))}
             </div>
@@ -119,12 +121,39 @@ const OrderDetails = () => {
                             <span>Total</span><span>${(totalPrice || 0).toFixed(2)}</span>
                         </div>
                         <div style={{ marginTop: '0.5rem', color: '#166534', fontSize: '0.8rem' }}>
-                            Payment Method: {paymentMethod === 'credit-card' ? 'Credit Card' : paymentMethod.toUpperCase()}
+                            Payment Method: {paymentMethod === 'credit-card' ? 'Credit Card' : paymentMethod?.toUpperCase()}
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    );
+};
+
+const InvoiceDownloadButton = ({ order }: { order: any }) => {
+    const [instance] = usePDF({ document: <InvoicePDF order={order} /> });
+
+    if (instance.loading) return (
+        <button className="btn btn-outline" disabled style={{ display: 'flex', gap: '0.5rem', cursor: 'wait' }}>
+            Preparing...
+        </button>
+    );
+
+    if (instance.error) return (
+        <button className="btn btn-outline" disabled style={{ color: 'red' }}>
+            Error
+        </button>
+    );
+
+    return (
+        <a
+            href={instance.url!}
+            download={`invoice_${order._id}.pdf`}
+            className="btn btn-outline"
+            style={{ display: 'flex', gap: '0.5rem', textDecoration: 'none', alignItems: 'center', cursor: 'pointer' }}
+        >
+            <Download size={16} /> Invoice
+        </a>
     );
 };
 

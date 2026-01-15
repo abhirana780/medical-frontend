@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import Hero from '../components/Hero';
 import Testimonials from '../components/Testimonials';
-import ProductCard from '../components/ProductCard';
 import PremiumProductCard from '../components/PremiumProductCard';
 import Brands from '../components/Brands';
 import { Zap, Truck, Check } from 'lucide-react';
@@ -11,6 +10,8 @@ import api from '../utils/api';
 import HeroVideoDialog from '../components/ui/HeroVideoDialog';
 import { FocusCards } from '../components/ui/FocusCards';
 import { InfiniteSlider } from '../components/ui/InfiniteSlider';
+import { ProductCardSkeleton } from '../components/ui/Skeletons';
+import RecentlyViewed from '../components/RecentlyViewed';
 import './Home.css';
 
 
@@ -451,7 +452,9 @@ const Home = () => {
                     }}>
                         {loading ? (
                             Array(6).fill(0).map((_, i) => (
-                                <div key={i} style={{ height: '450px', background: '#F8FAFC', borderRadius: '1.25rem' }}></div>
+                                <div key={i} style={{ height: '450px' }}>
+                                    <ProductCardSkeleton />
+                                </div>
                             ))
                         ) : (
                             featured.slice(0, 6).map((product: any, idx) => (
@@ -651,7 +654,9 @@ const Home = () => {
                     {loading ? (
                         <div style={{ display: 'flex', gap: '2rem', justifyContent: 'center' }}>
                             {Array(4).fill(0).map((_, i) => (
-                                <div key={i} style={{ width: '320px', height: '400px', background: '#F8FAFC', borderRadius: '1.25rem', flexShrink: 0 }}></div>
+                                <div key={i} style={{ width: '320px', height: '400px', flexShrink: 0 }}>
+                                    <ProductCardSkeleton />
+                                </div>
                             ))}
                         </div>
                     ) : (
@@ -762,6 +767,8 @@ const Home = () => {
                     </motion.div>
                 </div>
             </section>
+            {/* Recently Viewed Section */}
+            <RecentlyViewed />
         </>
     );
 };

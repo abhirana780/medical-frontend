@@ -1,5 +1,5 @@
-import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { User, Package, Heart, MapPin, CreditCard, Bell, Settings, LogOut, FileText } from 'lucide-react';
+import { Link, Outlet, useLocation, useNavigate, Navigate } from 'react-router-dom';
+import { User, Package, Heart, MapPin, CreditCard, Bell, Settings, LogOut, FileText, LayoutDashboard } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import './Dashboard.css';
 
@@ -20,6 +20,10 @@ const UserDashboard = () => {
         return null;
     }
 
+    // if (user.isAdmin) {
+    //     return <Navigate to="/admin/dashboard" replace />;
+    // }
+
     return (
         <div className="section dashboard-container">
             <div className="container dashboard-layout">
@@ -38,6 +42,13 @@ const UserDashboard = () => {
                     </div>
 
                     <ul className="dash-menu">
+                        {user.isAdmin && (
+                            <li style={{ marginBottom: '1rem', borderBottom: '1px solid #e2e8f0', paddingBottom: '0.5rem' }}>
+                                <Link to="/admin/dashboard" style={{ color: '#2563eb', fontWeight: 600, background: '#eff6ff' }}>
+                                    <LayoutDashboard size={18} /> Admin Dashboard
+                                </Link>
+                            </li>
+                        )}
                         <li>
                             <Link to="/account/profile" className={isActive('/account/profile') ? 'active' : ''}>
                                 <User size={18} /> Personal Information

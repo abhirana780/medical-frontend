@@ -36,6 +36,8 @@
     /* More breathing room */
     transition: padding 0.3s ease;
     background: #ffffff;
+    position: relative;
+    z-index: 950;
 }
 
 /* Logo */
@@ -68,9 +70,10 @@
 }
 
 /* Search Bar - bolder */
+/* Search Bar - Airbnb Style Pill */
 .search-container {
     flex: 1;
-    max-width: 600px;
+    max-width: 700px;
     margin: 0 3rem;
     position: relative;
 }
@@ -78,24 +81,31 @@
 .search-bar {
     display: flex;
     align-items: center;
-    background: #f1f5f9;
-    border: 2px solid transparent;
-    border-radius: 12px;
-    /* Slightly squarer for modern look */
-    padding: 0.3rem 0.3rem 0.3rem 1.25rem;
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 40px;
+    padding: 0.35rem 0.5rem 0.35rem 1.5rem;
     transition: all 0.2s ease;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
+    height: 56px;
+}
+
+.search-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+    padding: 2px 0;
 }
 
 .search-bar input {
-    flex: 1;
     width: 100%;
     border: none;
     background: transparent;
-    font-size: 1rem;
-    color: #0f172a;
+    font-size: 0.95rem;
+    color: #334155;
     outline: none;
-    font-weight: 500;
+    font-weight: 400;
 }
 
 .search-bar input::placeholder {
@@ -103,19 +113,27 @@
     font-weight: 400;
 }
 
-.search-bar:focus-within {
-    background: white;
-    border-color: #3b82f6;
-    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+.search-bar:hover {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
     transform: translateY(-1px);
 }
 
+.search-bar:focus-within {
+    border-color: #cbd5e1;
+    background: #f8fafc;
+    /* Subtle background change on focus */
+}
+
+/* Rounded Search Button */
 .search-btn {
-    border-radius: 8px;
-    /* Matching squarer look */
-    width: 40px;
-    height: 40px;
+    border-radius: 50%;
+    /* Circle */
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    /* Prevent squishing */
     background: #3b82f6;
+    /* Primary color */
     color: white;
     border: none;
     display: flex;
@@ -124,12 +142,115 @@
     cursor: pointer;
     transition: all 0.2s;
     box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.3);
+    margin-left: 0.5rem;
 }
 
 .search-btn:hover {
     background: #2563eb;
-    transform: translateY(-1px);
+    transform: scale(1.05);
+    /* Slight grow */
     box-shadow: 0 6px 10px -2px rgba(37, 99, 235, 0.4);
+}
+
+.search-section:hover {
+    background: #f1f5f9;
+    border-radius: 20px;
+}
+
+/* Category Select Styling */
+/* Category Select Styling (Replacer) */
+.custom-select-trigger {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: #475569;
+    padding-right: 0.5rem;
+    user-select: none;
+    height: 100%;
+}
+
+.custom-select-trigger:hover {
+    color: #0f172a;
+}
+
+.select-arrow {
+    transition: transform 0.2s;
+    color: #94a3b8;
+}
+
+.select-arrow.rotate {
+    transform: rotate(180deg);
+    color: #2563eb;
+}
+
+.fixed-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 99;
+    background: transparent;
+    cursor: default;
+}
+
+.custom-dropdown-menu {
+    position: absolute;
+    top: calc(100% + 12px);
+    left: -10px;
+    background: white;
+    min-width: 240px;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+    border-radius: 12px;
+    border: 1px solid #f1f5f9;
+    padding: 0.5rem;
+    z-index: 1001;
+    display: flex;
+    flex-direction: column;
+    max-height: 400px;
+    overflow-y: auto;
+    animation: fadeInScale 0.15s ease-out;
+}
+
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: translateY(-8px) scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.custom-option {
+    padding: 0.75rem 1rem;
+    color: #475569;
+    font-size: 0.95rem;
+    /* Larger font for premium feel */
+    font-weight: 500;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+}
+
+.custom-option:hover {
+    background: #f1f5f9;
+    color: #0f172a;
+    padding-left: 1.25rem;
+    /* Slide effect */
+}
+
+.custom-option.selected {
+    background: #eff6ff;
+    color: #2563eb;
+    font-weight: 600;
 }
 
 /* Header Actions */
@@ -184,45 +305,60 @@
 /* Navigation Menu - Premium Look */
 .nav-bar {
     background: #1e293b;
-    /* Deep matte blue/slate */
-    border-bottom: 1px solid #334155;
+    /* Deep matte blue/slate matches screenshot */
+    border-bottom: 1px solid #0f172a;
+    /* Very subtle dark border or remove */
     position: relative;
-    /* Ensure z-index works */
     z-index: 900;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
 .nav-container {
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 54px;
-    /* Comfortable touch target */
-    gap: 0.25rem;
+    /* Centered items like screenshot */
+    height: 52px;
+    /* Slim height */
+    gap: 1rem;
+    /* Adequate spacing between items */
     padding: 0 1rem;
     max-width: 1400px;
     margin: 0 auto;
 }
 
 .nav-link {
-    color: #cbd5e1;
-    /* Softer white */
+    color: #e2e8f0;
+    /* Light text */
     text-decoration: none;
     font-weight: 500;
-    font-size: 0.85rem;
-    padding: 0.6rem 0.8rem;
-    border-radius: 6px;
-    transition: all 0.25s ease;
+    font-size: 0.9rem;
+    /* Slightly larger readable text */
+    padding: 0.5rem 0.5rem;
+    border-radius: 4px;
+    /* Minimal radius */
+    transition: all 0.2s ease;
     display: flex;
     align-items: center;
-    gap: 0.35rem;
+    gap: 0.25rem;
     white-space: nowrap;
+    opacity: 0.9;
 }
 
 .nav-link:hover,
 .nav-item-wrapper:hover .nav-link {
-    background: rgba(255, 255, 255, 0.08);
     color: #ffffff;
-    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.05);
+    background: transparent;
+    /* No background pill per screenshot look usually */
+    opacity: 1;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+    /* Subtle glow */
+}
+
+/* Selected/Active State if needed */
+.nav-link.active {
+    color: #38bdf8;
+    font-weight: 600;
 }
 
 /* Dropdowns - Clean & Standard */

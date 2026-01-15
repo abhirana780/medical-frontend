@@ -1,5 +1,5 @@
 import { Outlet, Link, useLocation, Navigate, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, Package, ShoppingBag, Users, LogOut, FileText, MessageSquare, Tag, ClipboardList } from 'lucide-react';
+import { LayoutDashboard, Package, ShoppingBag, Users, LogOut, FileText, MessageSquare, Tag, ClipboardList, Star } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import './Admin.css';
 
@@ -46,6 +46,9 @@ const AdminLayout = () => {
                     </Link>
                     <Link to="/admin/inquiries" className={`admin-nav-item ${isActive('/admin/inquiries') ? 'active' : ''}`}>
                         <MessageSquare size={20} /> Inquiries
+                    </Link>
+                    <Link to="/admin/reviews" className={`admin-nav-item ${isActive('/admin/reviews') ? 'active' : ''}`}>
+                        <Star size={20} /> Reviews
                     </Link>
                     <Link to="/admin/coupons" className={`admin-nav-item ${isActive('/admin/coupons') ? 'active' : ''}`}>
                         <Tag size={20} /> Coupons

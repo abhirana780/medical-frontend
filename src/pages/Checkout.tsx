@@ -7,10 +7,6 @@ import api from '../utils/api';
 import './Checkout.css';
 
 // Stripe Imports
-import { loadStripe } from '@stripe/stripe-js';
-import { Elements } from '@stripe/react-stripe-js';
-import PaymentForm from '../components/PaymentForm';
-
 const Checkout = () => {
     const { cart, cartTotal, clearCart } = useCart();
     const { user } = useAuth();
@@ -19,10 +15,6 @@ const Checkout = () => {
     const [paymentMethod, setPaymentMethod] = useState('credit-card');
     const [shippingMethod, setShippingMethod] = useState('flat-rate');
     const [isProcessing, setIsProcessing] = useState(false);
-
-    // Stripe State
-    const [stripePromise, setStripePromise] = useState<any>(null);
-    const [clientSecret, setClientSecret] = useState('');
 
     // Saved Addresses
     const [savedAddresses, setSavedAddresses] = useState<any[]>([]);
@@ -38,7 +30,7 @@ const Checkout = () => {
     const handleSelectAddress = (addr: any) => {
         setFormData(prev => ({
             ...prev,
-            address: addr.street,
+            address: addr.street || addr.address,
             city: addr.city,
             country: addr.country,
             postalCode: addr.postalCode,
@@ -71,7 +63,7 @@ const Checkout = () => {
             setStripePromise(loadStripe(publishableKey));
         }).catch(e => console.error("Stripe config error", e));
     }, []);
-
+    
     useEffect(() => {
         // Create PaymentIntent when total changes or component loads
         if (finalTotal > 0) {
@@ -151,6 +143,13 @@ const Checkout = () => {
             navigate('/login');
             return;
         }
+
+        // Basic Validation
+        if (!formData.firstName || !formData.lastName || !formData.address || !formData.city || !formData.country || !formData.phone) {
+            alert("Please fill in all required billing details (Name, Address, City, Phone).");
+            return;
+        }
+
         // If Credit Card, the PaymentForm handles the submission.
         // If COD or Paypal, we submit here.
         // MOCK: Allow credit-card to submit directly without Stripe for now

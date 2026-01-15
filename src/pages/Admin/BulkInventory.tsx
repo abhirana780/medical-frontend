@@ -73,7 +73,7 @@ const BulkInventory = () => {
 
             if (rejected.length > 0) {
                 console.error('Failed updates:', rejected);
-                const firstError = rejected[0]?.error?.response?.data?.message || rejected[0]?.error?.message || 'Unknown error';
+                const firstError = (rejected[0] as any)?.error?.response?.data?.message || (rejected[0] as any)?.error?.message || 'Unknown error';
                 alert(`Updated ${fulfilled.length} products. Failed to update ${rejected.length} products.\nFirst Error: ${firstError}`);
             } else {
                 alert('All products updated successfully!');

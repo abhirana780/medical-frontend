@@ -1,66 +1,109 @@
-import { Link, useNavigate } from 'react-router-dom';
+
+import { Link, useNavigate, useSearchParams, useLocation } from 'react-router-dom';
 import { Search, ShoppingCart, Menu, Phone, ChevronDown, Heart, X, User, LogOut, LayoutDashboard } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import { CATEGORIES } from '../data/categories';
 import toast from 'react-hot-toast';
+import api from '../utils/api';
 import './Header.css';
 
 const Header = () => {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-    const [openSubMenu, setOpenSubMenu] = useState(null);
+    const [openSubMenu, setOpenSubMenu] = useState<string | null>(null);
     const [searchQuery, setSearchQuery] = useState('');
+    const [searchCategory, setSearchCategory] = useState('');
+    const [categoryDropdownOpen, setCategoryDropdownOpen] = useState(false);
     const [userMenuOpen, setUserMenuOpen] = useState(false);
+
+    // Smart Search State
+    const [suggestions, setSuggestions] = useState<any[]>([]);
+    const [showSuggestions, setShowSuggestions] = useState(false);
+    const [timer, setTimer] = useState<ReturnType<typeof setTimeout> | null>(null);
+
     const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
+    const location = useLocation();
     const { cartCount } = useCart();
     const { user, logout } = useAuth();
 
+    // Sync state with URL
+    useEffect(() => {
+        if (location.pathname === '/catalog') {
+            const cat = searchParams.get('cat');
+            const search = searchParams.get('search');
+            if (cat !== null) setSearchCategory(cat);
+            else setSearchCategory('');
 
-    const [suggestions, setSuggestions] = useState<string[]>([]);
-    const [showSuggestions, setShowSuggestions] = useState(false);
+            if (search !== null) setSearchQuery(search);
+        }
+    }, [location.pathname, searchParams]);
 
-    // Suggestion logic
-    const handleSearchInput = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleSelectCategory = (newCat: string) => {
+        setSearchCategory(newCat);
+
+        // Immediate navigation logic
+        let url = `/catalog`;
+        const params = [];
+
+        // Keep existing search query if present
+        if (searchQuery.trim()) params.push(`search=${encodeURIComponent(searchQuery)}`);
+        if (newCat) params.push(`cat=${encodeURIComponent(newCat)}`);
+
+        if (params.length > 0) {
+            url += `?${params.join('&')}`;
+        }
+        navigate(url);
+    };
+
+    const handleSearchInput = (e: React.ChangeEvent<HTMLInputElement>) => {
         const query = e.target.value;
         setSearchQuery(query);
 
-        if (query.length > 1) {
-            // Basic implementation: Filter from existing categories/subcategories or fetch from API
-            // For demo, we'll use a static list + categories. In production, call an API endpoint.
-            const allTerms = [
-                ...CATEGORIES.map(c => c.name),
-                ...CATEGORIES.flatMap(c => c.subcategories),
-                "Wheelchair", "Gloves", "Masks", "Oxygen", "Monitor", "Diabetes", "Tens Unit"
-            ];
+        if (timer) clearTimeout(timer);
 
-            const filtered = allTerms.filter(term =>
-                term.toLowerCase().includes(query.toLowerCase())
-            ).slice(0, 5); // Limit to 5
-
-            setSuggestions(Array.from(new Set(filtered))); // Remove duplicates
-            setShowSuggestions(true);
+        if (query.length > 2) {
+            const newTimer = setTimeout(async () => {
+                try {
+                    const { data } = await api.get(`/api/products?search=${encodeURIComponent(query)}&limit=5`);
+                    setSuggestions(data.products || data); // Handle pagination response or array
+                    setShowSuggestions(true);
+                } catch (err) {
+                    console.error("Search error", err);
+                }
+            }, 300); // 300ms debounce
+            setTimer(newTimer);
         } else {
             setShowSuggestions(false);
         }
     };
 
-    const handleSuggestionClick = (term: string) => {
-        setSearchQuery(term);
+    const handleSuggestionClick = (product: any) => {
+        setSearchQuery('');
         setShowSuggestions(false);
-        navigate(`/catalog?search=${encodeURIComponent(term)}`);
+        navigate(`/product/${product._id}`);
     };
 
-    const toggleSubMenu = (menu: any) => {
+    const toggleSubMenu = (menu: string) => {
         setOpenSubMenu(openSubMenu === menu ? null : menu);
     };
 
     const handleSearch = (e: any) => {
         e.preventDefault();
         setShowSuggestions(false);
-        if (searchQuery.trim()) {
-            navigate(`/catalog?search=${encodeURIComponent(searchQuery)}`);
+
+        // Always redirect to catalog, defaulting to "All Products" if inputs are empty
+        let url = `/catalog`;
+        const params = [];
+        if (searchQuery.trim()) params.push(`search=${encodeURIComponent(searchQuery)}`);
+        if (searchCategory) params.push(`cat=${encodeURIComponent(searchCategory)}`);
+
+        if (params.length > 0) {
+            url += `?${params.join('&')}`;
         }
+
+        navigate(url);
     };
 
     const handleLogout = () => {
@@ -84,7 +127,7 @@ const Header = () => {
                     </div>
                     <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
                         {user ? (
-                            <div style={{ position: 'relative' }}>
+                            <div style={{ position: 'relative', zIndex: 1001 }}>
                                 <button
                                     onClick={() => setUserMenuOpen(!userMenuOpen)}
                                     style={{ background: 'none', border: 'none', color: 'white', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.9rem' }}
@@ -115,9 +158,11 @@ const Header = () => {
                                                 <LayoutDashboard size={16} /> Admin Panel
                                             </Link>
                                         )}
-                                        <Link to="/account" className="dropdown-item" onClick={() => setUserMenuOpen(false)} style={{ color: '#333', display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.75rem 1rem' }}>
-                                            <User size={16} /> My Account
-                                        </Link>
+                                        {!user.isAdmin && (
+                                            <Link to="/account" className="dropdown-item" onClick={() => setUserMenuOpen(false)} style={{ color: '#333', display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.75rem 1rem' }}>
+                                                <User size={16} /> My Account
+                                            </Link>
+                                        )}
                                         <button onClick={handleLogout} className="dropdown-item" style={{ width: '100%', textAlign: 'left', background: 'none', border: 'none', color: '#ef4444', display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.75rem 1rem', cursor: 'pointer', fontSize: '0.9rem' }}>
                                             <LogOut size={16} /> Logout
                                         </button>
@@ -144,14 +189,67 @@ const Header = () => {
 
                     <div className="search-container" style={{ position: 'relative' }}>
                         <form className="search-bar" onSubmit={handleSearch}>
-                            <input
-                                type="text"
-                                placeholder="Search products (e.g. Wheelchair, Gloves)..."
-                                value={searchQuery}
-                                onChange={handleSearchInput}
-                                onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
-                                onFocus={() => searchQuery.length > 1 && setShowSuggestions(true)}
-                            />
+                            {/* Category Selector */}
+                            {/* Category Selector */}
+                            <div className="search-section" style={{ borderRight: '1px solid #e2e8f0', paddingRight: '0.5rem', marginRight: '0.5rem', position: 'relative', minWidth: '140px' }}>
+                                <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: 700, color: '#0f172a', marginBottom: '2px', paddingLeft: '4px' }}>Category</label>
+
+                                <div
+                                    className="custom-select-trigger"
+                                    onClick={() => setCategoryDropdownOpen(!categoryDropdownOpen)}
+                                >
+                                    <span style={{
+                                        color: searchCategory ? '#0f172a' : '#64748b',
+                                        fontWeight: 500,
+                                        display: 'block',
+                                        whiteSpace: 'nowrap',
+                                        overflow: 'hidden',
+                                        textOverflow: 'ellipsis',
+                                        fontSize: '0.9rem'
+                                    }}>
+                                        {searchCategory || "All Categories"}
+                                    </span>
+                                    <ChevronDown size={14} className={`select-arrow ${categoryDropdownOpen ? 'rotate' : ''}`} />
+                                </div>
+
+                                {categoryDropdownOpen && (
+                                    <>
+                                        <div className="fixed-backdrop" onClick={() => setCategoryDropdownOpen(false)}></div>
+                                        <div className="custom-dropdown-menu">
+                                            <div
+                                                className={`custom-option ${!searchCategory ? 'selected' : ''}`}
+                                                onClick={() => { handleSelectCategory(''); setCategoryDropdownOpen(false); }}
+                                            >
+                                                All Categories
+                                            </div>
+                                            {CATEGORIES.map(cat => (
+                                                <div
+                                                    key={cat.name}
+                                                    className={`custom-option ${searchCategory === cat.name ? 'selected' : ''}`}
+                                                    onClick={() => { handleSelectCategory(cat.name); setCategoryDropdownOpen(false); }}
+                                                >
+                                                    {cat.name}
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </>
+                                )}
+                            </div>
+
+                            {/* Search Input */}
+                            <div className="search-section" style={{ flexGrow: 1 }}>
+                                <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: 700, color: '#0f172a', marginBottom: '2px', paddingLeft: '4px' }}>Search</label>
+                                <input
+                                    type="text"
+                                    placeholder="Search products..."
+                                    value={searchQuery}
+                                    onChange={handleSearchInput}
+                                    onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
+                                    onFocus={() => searchQuery.length > 2 && setShowSuggestions(true)}
+                                    style={{ padding: 0 }}
+                                />
+                            </div>
+
                             <button type="submit" className="search-btn">
                                 <Search size={18} />
                             </button>
@@ -159,17 +257,71 @@ const Header = () => {
 
                         {/* Search Suggestions Dropdown */}
                         {showSuggestions && suggestions.length > 0 && (
-                            <div className="search-suggestions">
-                                {suggestions.map((term, idx) => (
+                            <div className="search-suggestions" style={{
+                                position: 'absolute',
+                                top: '100%',
+                                left: 0,
+                                right: 0,
+                                background: 'white',
+                                boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+                                borderRadius: '0.75rem',
+                                zIndex: 50,
+                                marginTop: '0.5rem',
+                                border: '1px solid #e2e8f0',
+                                overflow: 'hidden'
+                            }}>
+                                <div style={{ padding: '0.5rem 1rem', fontSize: '0.75rem', fontWeight: 600, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.05em', background: '#f8fafc' }}>
+                                    Products
+                                </div>
+                                {suggestions.map((product) => (
                                     <div
-                                        key={idx}
+                                        key={product._id}
                                         className="suggestion-item"
-                                        onMouseDown={() => handleSuggestionClick(term)} // onMouseDown fires before onBlur
+                                        onMouseDown={() => handleSuggestionClick(product)}
+                                        style={{
+                                            display: 'flex',
+                                            gap: '1rem',
+                                            alignItems: 'center',
+                                            padding: '0.75rem 1rem',
+                                            cursor: 'pointer',
+                                            transition: 'background 0.2s',
+                                            borderBottom: '1px solid #f1f5f9'
+                                        }}
+                                        onMouseEnter={(e) => e.currentTarget.style.background = '#f8fafc'}
+                                        onMouseLeave={(e) => e.currentTarget.style.background = 'white'}
                                     >
-                                        <Search size={14} color="#94a3b8" />
-                                        <span>{term}</span>
+                                        <img
+                                            src={product.image}
+                                            alt={product.name}
+                                            style={{ width: '40px', height: '40px', borderRadius: '0.5rem', objectFit: 'cover', background: '#f1f5f9' }}
+                                            onError={(e: any) => e.target.src = 'https://via.placeholder.com/40'}
+                                        />
+                                        <div style={{ flexGrow: 1, overflow: 'hidden' }}>
+                                            <div style={{ fontWeight: 500, color: '#0f172a', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                                {product.name}
+                                            </div>
+                                            <div style={{ fontSize: '0.85rem', color: '#64748B' }}>
+                                                ${product.price.toFixed(2)}
+                                            </div>
+                                        </div>
                                     </div>
                                 ))}
+                                <div
+                                    className="suggestion-item"
+                                    onMouseDown={handleSearch}
+                                    style={{
+                                        padding: '0.75rem',
+                                        textAlign: 'center',
+                                        color: '#2563eb',
+                                        fontWeight: 600,
+                                        cursor: 'pointer',
+                                        fontSize: '0.875rem'
+                                    }}
+                                    onMouseEnter={(e) => e.currentTarget.style.background = '#eff6ff'}
+                                    onMouseLeave={(e) => e.currentTarget.style.background = 'white'}
+                                >
+                                    View all results for "{searchQuery}"
+                                </div>
                             </div>
                         )}
                     </div>
