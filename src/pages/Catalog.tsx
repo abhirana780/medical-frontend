@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
-import { ChevronDown, ChevronRight, Grid, List } from 'lucide-react';
-import ProductCard from '../components/ProductCard';
+import { ChevronDown, ChevronRight, Grid, List, SlidersHorizontal, Filter, X } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import PremiumProductCard from '../components/PremiumProductCard';
 import api from '../utils/api';
 import { CATEGORIES } from '../data/categories';
+import { AnimatedGradientBackground, GridPattern } from '../components/ui/AnimatedBackground';
 import './Catalog.css';
 
 const BRANDS = ["Generic", "Omron", "Philips", "3M", "Nidek", "ResMed"];
@@ -92,21 +94,52 @@ const Catalog = () => {
                     <span className="current">Catalog</span>
                 </div>
 
-                <div className="cat-header">
-                    <h1>{pageTitle}</h1>
-                    <p>Browse our extensive collection of medical supplies and equipment.</p>
+                <div className="cat-header" style={{ position: 'relative', overflow: 'hidden', padding: '2rem 2rem', borderRadius: '1.5rem', background: '#F8FAFC', marginBottom: '3rem' }}>
+                    <AnimatedGradientBackground />
+                    <GridPattern />
+                    <div style={{ position: 'relative', zIndex: 10, textAlign: 'center' }}>
+                        <motion.h1
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            style={{ fontSize: '3rem', fontWeight: 800, color: '#0F172A', marginBottom: '1rem', letterSpacing: '-0.02em' }}
+                        >
+                            {pageTitle}
+                        </motion.h1>
+                        <motion.p
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.1 }}
+                            style={{ fontSize: '1.15rem', color: '#64748B', maxWidth: '600px', margin: '0 auto' }}
+                        >
+                            Browse our extensive collection of medical supplies and equipment.
+                        </motion.p>
+                    </div>
                 </div>
 
                 <div className="cat-layout">
                     {/* Sidebar Filters */}
-                    <aside className="cat-sidebar">
+                    <motion.aside
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        className="cat-sidebar"
+                    >
                         <div className="filter-group">
-                            <h4>Categories</h4>
-                            <ul className="filter-list tree">
-                                <li><Link to="/catalog">All Products</Link></li>
+                            <div className="fg-header">
+                                <h4 style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                    <Filter size={18} /> Categories
+                                </h4>
+                            </div>
+                            <ul className="filter-list tree" style={{ marginTop: '1rem' }}>
+                                <li><Link to="/catalog" style={{ fontWeight: !categoryQuery ? 600 : 400, color: !categoryQuery ? '#2563EB' : 'inherit' }}>All Products</Link></li>
                                 {CATEGORIES.map((cat) => (
-                                    <li key={cat.name} className="ml-2">
-                                        <Link to={`/catalog?cat=${cat.name}`} className={categoryQuery === cat.name ? 'active-cat' : ''}>
+                                    <li key={cat.name} style={{ marginTop: '0.4rem' }}>
+                                        <Link to={`/catalog?cat=${cat.name}`} style={{
+                                            paddingLeft: '0.75rem',
+                                            borderLeft: categoryQuery === cat.name ? '2px solid #2563EB' : '2px solid transparent',
+                                            color: categoryQuery === cat.name ? '#2563EB' : 'inherit',
+                                            fontWeight: categoryQuery === cat.name ? 600 : 400,
+                                            transition: 'all 0.2s'
+                                        }}>
                                             {cat.name}
                                         </Link>
                                     </li>
@@ -194,10 +227,16 @@ const Catalog = () => {
                             </div>
                         </div>
 
-                        <button onClick={clearFilters} className="btn btn-outline btn-sm" style={{ width: '100%', marginTop: '1rem' }}>
-                            Reset Filters
-                        </button>
-                    </aside>
+                        <motion.button
+                            whileHover={{ scale: 1.02 }}
+                            whileTap={{ scale: 0.98 }}
+                            onClick={clearFilters}
+                            className="btn btn-outline btn-sm"
+                            style={{ width: '100%', marginTop: '1rem', borderRadius: '0.75rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}
+                        >
+                            <X size={16} /> Reset Filters
+                        </motion.button>
+                    </motion.aside>
 
                     {/* Main Content */}
                     <main className="cat-content">
@@ -228,30 +267,52 @@ const Catalog = () => {
                             </div>
                         </div>
 
-                        {loading ? (
-                            <div style={{ textAlign: 'center', padding: '4rem' }}>
-                                <div className="spinner"></div>
-                                <p style={{ marginTop: '1rem' }}>Loading products...</p>
-                            </div>
-                        ) : products.length > 0 ? (
-                            <div className={viewMode === 'grid' ? "grid-cols-3 product-grid" : "list-view product-list"}>
-                                {products.map(p => (
-                                    <ProductCard key={p._id} product={p} viewMode={viewMode} />
-                                ))}
-                            </div>
-                        ) : (
-                            <div style={{ textAlign: 'center', padding: '4rem', color: '#64748B', background: '#F8FAFC', borderRadius: '1rem' }}>
-                                <h3>No products found.</h3>
-                                <p>Try adjusting your filters or search query.</p>
-                                <button
-                                    onClick={clearFilters}
-                                    className="btn btn-outline"
-                                    style={{ marginTop: '1rem' }}
+                        <AnimatePresence mode="wait">
+                            {loading ? (
+                                <motion.div
+                                    key="loading"
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    exit={{ opacity: 0 }}
+                                    style={{ textAlign: 'center', padding: '8rem 4rem' }}
                                 >
-                                    Clear Filters
-                                </button>
-                            </div>
-                        )}
+                                    <div className="spinner" style={{ margin: '0 auto' }}></div>
+                                    <p style={{ marginTop: '1.5rem', color: '#64748B', fontSize: '1.1rem' }}>Loading products...</p>
+                                </motion.div>
+                            ) : products.length > 0 ? (
+                                <motion.div
+                                    key="grid"
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    className={viewMode === 'grid' ? "grid-cols-3 product-grid" : "list-view product-list"}
+                                    style={{ gap: '2rem' }}
+                                >
+                                    {products.map((p, idx) => (
+                                        <PremiumProductCard key={p._id} product={p} index={idx} viewMode={viewMode} />
+                                    ))}
+                                </motion.div>
+                            ) : (
+                                <motion.div
+                                    key="empty"
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    style={{ textAlign: 'center', padding: '8rem 4rem', color: '#64748B', background: '#F8FAFC', borderRadius: '1.5rem', border: '1px dashed #E2E8F0' }}
+                                >
+                                    <SlidersHorizontal size={48} style={{ marginBottom: '1.5rem', opacity: 0.3 }} />
+                                    <h3 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#1E293B', marginBottom: '0.5rem' }}>No products found.</h3>
+                                    <p>Try adjusting your filters or search query.</p>
+                                    <motion.button
+                                        whileHover={{ scale: 1.05 }}
+                                        whileTap={{ scale: 0.95 }}
+                                        onClick={clearFilters}
+                                        className="btn btn-primary"
+                                        style={{ marginTop: '2rem', padding: '0.75rem 2rem' }}
+                                    >
+                                        Clear All Filters
+                                    </motion.button>
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
 
                         {!loading && products.length > 0 && (
                             <div className="pagination">

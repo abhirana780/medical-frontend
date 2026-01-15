@@ -16,128 +16,86 @@
     font-weight: 500;
 }
 
-.cat-header {
-    background: #E0F2FE;
-    padding: 2.5rem;
-    text-align: center;
-    border-radius: 0.5rem;
-    margin-bottom: 3rem;
-}
-
-.cat-header h1 {
-    font-size: 2rem;
-    font-weight: 700;
-    margin: 0 0 1rem;
-    color: var(--primary-dark);
-}
-
-.cat-header p {
-    color: var(--text-muted);
-    max-width: 600px;
-    margin: 0 auto;
-}
-
 .cat-layout {
     display: grid;
-    grid-template-columns: 260px 1fr;
-    gap: 3rem;
+    grid-template-columns: 280px 1fr;
+    gap: 4rem;
 }
 
 /* Sidebar */
+.cat-sidebar {
+    background: white;
+    padding: 2rem;
+    border-radius: 1.5rem;
+    box-shadow: 0 4px 20px -5px rgba(0, 0, 0, 0.05);
+    height: fit-content;
+    position: sticky;
+    top: 2rem;
+}
+
 .filter-group {
-    margin-bottom: 2rem;
-    border-bottom: 1px solid var(--border);
+    margin-bottom: 2.5rem;
     padding-bottom: 1.5rem;
+    border-bottom: 1px solid #F1F5F9;
 }
 
 .filter-group:last-child {
     border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
 }
 
 .filter-group h4 {
-    margin: 0 0 1rem;
-    font-size: 1rem;
-    font-weight: 600;
+    margin: 0;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #1E293B;
 }
 
 .fg-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 1rem;
-    cursor: pointer;
-}
-
-.fg-header h4 {
-    margin: 0;
-}
-
-.filter-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
+    margin-bottom: 1.25rem;
 }
 
 .filter-list li {
     font-size: 0.95rem;
-    color: var(--text-muted);
-    margin-bottom: 0.5rem;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
+    color: #64748B;
+    margin-bottom: 0.75rem;
 }
 
-.filter-list li:hover {
-    color: var(--primary);
+.filter-list li a:hover {
+    color: #2563EB;
+    transform: translateX(4px);
 }
 
-.filter-list.tree .active {
-    font-weight: 600;
-    color: var(--primary);
+.filter-list li a {
+    display: inline-block;
+    transition: all 0.2s;
 }
 
-.ml-2 {
-    margin-left: 0.5rem;
+/* Form Controls */
+.form-control {
+    border: 1px solid #E2E8F0;
+    border-radius: 0.75rem;
+    color: #475569;
+    font-size: 0.9rem;
+    outline: none;
+    transition: all 0.2s;
 }
 
-.ml-4 {
-    margin-left: 1rem;
+.form-control:focus {
+    border-color: #2563EB;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
 }
 
-.check-list input[type="checkbox"] {
-    accent-color: var(--primary);
-}
-
-.price-slider input {
-    width: 100%;
-}
-
-.price-labels {
-    display: flex;
-    justify-content: space-between;
-    font-size: 0.85rem;
-    color: var(--text-muted);
-    margin-top: 0.5rem;
-}
-
-.color-opts {
-    display: flex;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-}
-
-.c-dot {
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    cursor: pointer;
-    border: 2px solid white;
-    box-shadow: 0 0 0 1px var(--border);
-}
-
-.c-dot:hover {
-    transform: scale(1.1);
+/* Price Slider */
+.price-slider input[type="range"] {
+    accent-color: #2563EB;
+    height: 6px;
+    border-radius: 10px;
+    background: #E2E8F0;
 }
 
 /* Toolbar */
@@ -145,7 +103,11 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 2rem;
+    margin-bottom: 3rem;
+    padding: 1.25rem 2rem;
+    background: white;
+    border-radius: 1rem;
+    box-shadow: 0 4px 15px -5px rgba(0, 0, 0, 0.05);
 }
 
 .toolbar-controls {
@@ -202,32 +164,35 @@
 }
 
 .page-btn {
-    width: 36px;
-    height: 36px;
-    border: 1px solid var(--border);
+    width: 40px;
+    height: 40px;
+    border: 1px solid #E2E8F0;
     background: white;
-    border-radius: 0.25rem;
+    border-radius: 0.75rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.9rem;
-    color: var(--text-muted);
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #64748B;
     transition: all 0.2s;
 }
 
 .page-btn:hover:not(.disabled) {
-    border-color: var(--primary);
-    color: var(--primary);
+    border-color: #2563EB;
+    color: #2563EB;
+    background: #F8FAFC;
 }
 
 .page-btn.active {
-    background: var(--primary);
-    border-color: var(--primary);
+    background: #2563EB;
+    border-color: #2563EB;
     color: white;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
 }
 
 .page-btn.disabled {
-    opacity: 0.5;
+    opacity: 0.4;
     cursor: not-allowed;
 }
 

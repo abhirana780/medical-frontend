@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link, useLocation } from 'react-router-dom';
 import { Star, Truck, ShieldCheck, RefreshCw, Minus, Plus, ShoppingCart, Heart, ArrowLeft } from 'lucide-react';
-import ProductCard from '../components/ProductCard';
+import PremiumProductCard from '../components/PremiumProductCard';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import { useWishlist } from '../context/WishlistContext';
@@ -443,8 +443,8 @@ const ProductDetails = () => {
                     <div style={{ marginTop: '4rem' }}>
                         <h3 className="mb-8 text-center">Frequently Bought Together</h3>
                         <div className="grid-cols-4">
-                            {relatedProducts.slice(2).map(p => (
-                                <ProductCard key={p._id} product={p as any} />
+                            {relatedProducts.slice(2).map((p, idx) => (
+                                <PremiumProductCard key={p._id} product={p as any} index={idx} />
                             ))}
                         </div>
                     </div>

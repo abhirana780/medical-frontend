@@ -1,6 +1,10 @@
 import { useState } from 'react';
-import { Mail, Phone, MapPin, CheckCircle, AlertCircle } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Mail, Phone, MapPin, CheckCircle, AlertCircle, Send, ArrowRight } from 'lucide-react';
 import api from '../utils/api';
+import { AnimatedGradientBackground, GridPattern } from '../components/ui/AnimatedBackground';
+import { BackgroundBeams } from '../components/ui/BackgroundBeams';
+import './Contact.css';
 
 const Contact = () => {
     const [formData, setFormData] = useState({ name: '', email: '', message: '' });
@@ -24,124 +28,141 @@ const Contact = () => {
     };
 
     return (
-        <div className="section">
-            <div className="container">
-                <h1 className="text-center mb-12">Contact Us</h1>
+        <div className="contact-page">
+            {/* Left Side: Cinematic Info */}
+            <div className="contact-left">
+                <AnimatedGradientBackground />
+                <GridPattern />
+                <BackgroundBeams />
 
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '4rem' }}>
-
-                    {/* Contact Info */}
-                    <div>
-                        <h2 className="mb-8">Get In Touch</h2>
-                        <p className="mb-8 text-muted">
-                            Have questions about our products or need assistance with an order?
-                            Our team is here to help you find the right medical solutions.
+                <div className="contact-content-wrapper">
+                    <motion.div
+                        initial={{ opacity: 0, x: -50 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.8, ease: "easeOut" }}
+                    >
+                        <h1 className="contact-title">Let’s Start a Conversation</h1>
+                        <p className="contact-desc">
+                            We’re here to help you find the best medical supplies. Reach out and let’s discuss how we can support your healthcare needs.
                         </p>
+                    </motion.div>
 
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-                            <div style={{ display: 'flex', gap: '1rem' }}>
-                                <div style={{ background: 'var(--bg)', padding: '1rem', borderRadius: '50%', height: 'fit-content' }}>
-                                    <Phone color="var(--primary)" />
+                    <div className="info-cards-stack">
+                        {[
+                            { icon: Phone, title: "Call Us", value: "+1 473-440-7030", desc: "Mon-Fri 9am-6pm" },
+                            { icon: Mail, title: "Email Us", value: "contact@scottsmedical.com", desc: "We reply within 24 hours" },
+                            { icon: MapPin, title: "Our Location", value: "St. George's, Grenada", desc: "Scott's Medical Supply" }
+                        ].map((item, i) => (
+                            <motion.div
+                                key={i}
+                                initial={{ opacity: 0, x: -30 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ delay: 0.2 + i * 0.1, duration: 0.5 }}
+                                className="minimal-info-card"
+                            >
+                                <div className="icon-box">
+                                    <item.icon size={20} />
                                 </div>
-                                <div>
-                                    <h3 style={{ margin: '0 0 0.5rem' }}>Phone</h3>
-                                    <p className="text-muted">473-440-7030</p>
-                                    <p className="text-muted">Mon-Fri 9am-6pm</p>
+                                <div style={{ flex: 1 }}>
+                                    <h4 style={{ margin: 0, fontSize: '1rem', fontWeight: 700, color: 'white' }}>{item.title}</h4>
+                                    <p style={{ margin: 0, fontSize: '0.9rem', color: '#94A3B8' }}>{item.value}</p>
+                                    <p style={{ margin: 0, fontSize: '0.75rem', color: '#64748B' }}>{item.desc}</p>
                                 </div>
-                            </div>
-
-                            <div style={{ display: 'flex', gap: '1rem' }}>
-                                <div style={{ background: 'var(--bg)', padding: '1rem', borderRadius: '50%', height: 'fit-content' }}>
-                                    <Mail color="var(--primary)" />
-                                </div>
-                                <div>
-                                    <h3 style={{ margin: '0 0 0.5rem' }}>Email</h3>
-                                    <p className="text-muted">contact@scottsmedical.com</p>
-                                    <p className="text-muted">sales@scottsmedical.com</p>
-                                </div>
-                            </div>
-
-                            <div style={{ display: 'flex', gap: '1rem' }}>
-                                <div style={{ background: 'var(--bg)', padding: '1rem', borderRadius: '50%', height: 'fit-content' }}>
-                                    <MapPin color="var(--primary)" />
-                                </div>
-                                <div>
-                                    <h3 style={{ margin: '0 0 0.5rem' }}>Location</h3>
-                                    <p className="text-muted">Scott's Medical Supply</p>
-                                    <p className="text-muted">Grenada</p>
-                                </div>
-                            </div>
-                        </div>
+                                <ArrowRight size={16} color="#334155" />
+                            </motion.div>
+                        ))}
                     </div>
+                </div>
+            </div>
 
-                    {/* Contact Form */}
-                    <div style={{ background: 'white', padding: '2rem', borderRadius: '1rem', boxShadow: 'var(--shadow)' }}>
-                        <h3 className="mb-4">Send us a Message</h3>
+            {/* Right Side: High-End Form */}
+            <div className="contact-right">
+                <motion.div
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: 0.3 }}
+                    style={{ maxWidth: '500px', width: '100%', margin: '0 auto' }}
+                >
+                    <h2 className="contact-form-title">Send a Message</h2>
+                    <p className="contact-form-subtitle">Fill out the form below and we'll get back to you shortly.</p>
 
+                    <AnimatePresence mode="wait">
                         {status === 'success' ? (
-                            <div style={{ textAlign: 'center', padding: '2rem', color: '#16A34A', background: '#DCFCE7', borderRadius: '0.5rem' }}>
-                                <CheckCircle className="mx-auto mb-2" />
-                                <p>Thank you! Your message has been sent.</p>
-                                <button onClick={() => setStatus('idle')} className="btn btn-outline btn-xs mt-4">Send Another</button>
-                            </div>
+                            <motion.div
+                                key="success"
+                                initial={{ opacity: 0, scale: 0.9 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                style={{ textAlign: 'center', padding: '3rem 0' }}
+                            >
+                                <div style={{ width: '80px', height: '80px', background: '#DCFCE7', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem' }}>
+                                    <CheckCircle size={40} color="#16A34A" />
+                                </div>
+                                <h3 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#0F172A', marginBottom: '0.5rem' }}>Success!</h3>
+                                <p style={{ color: '#64748B', marginBottom: '2rem' }}>Your inquiry has been submitted successfully.</p>
+                                <button onClick={() => setStatus('idle')} className="btn btn-outline" style={{ borderRadius: '1rem' }}>
+                                    Send Another Message
+                                </button>
+                            </motion.div>
                         ) : (
                             <form onSubmit={handleSubmit}>
-                                <div style={{ marginBottom: '1.5rem' }}>
-                                    <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 500 }}>Full Name</label>
+                                <div className="input-container">
                                     <input
                                         type="text"
                                         name="name"
                                         required
                                         value={formData.name}
                                         onChange={handleChange}
-                                        placeholder="John Doe"
-                                        style={{ width: '100%', padding: '0.75rem', borderRadius: '0.5rem', border: '1px solid var(--border)', fontSize: '1rem', fontFamily: 'inherit' }}
+                                        placeholder="Your Full Name"
+                                        className="floating-label-input"
                                     />
                                 </div>
-                                <div style={{ marginBottom: '1.5rem' }}>
-                                    <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 500 }}>Email Address</label>
+                                <div className="input-container">
                                     <input
                                         type="email"
                                         name="email"
                                         required
                                         value={formData.email}
                                         onChange={handleChange}
-                                        placeholder="john@example.com"
-                                        style={{ width: '100%', padding: '0.75rem', borderRadius: '0.5rem', border: '1px solid var(--border)', fontSize: '1rem', fontFamily: 'inherit' }}
+                                        placeholder="Your Email Address"
+                                        className="floating-label-input"
                                     />
                                 </div>
-                                <div style={{ marginBottom: '1.5rem' }}>
-                                    <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 500 }}>Message</label>
+                                <div className="input-container">
                                     <textarea
-                                        rows={4}
+                                        rows={5}
                                         name="message"
                                         required
                                         value={formData.message}
                                         onChange={handleChange}
                                         placeholder="How can we help you?"
-                                        style={{ width: '100%', padding: '0.75rem', borderRadius: '0.5rem', border: '1px solid var(--border)', fontSize: '1rem', fontFamily: 'inherit', resize: 'vertical' }}
+                                        className="floating-label-input"
+                                        style={{ resize: 'none' }}
                                     ></textarea>
                                 </div>
 
                                 {status === 'error' && (
-                                    <div style={{ marginBottom: '1rem', color: '#EF4444', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                        <AlertCircle size={16} /> Failed to send message. Try again.
-                                    </div>
+                                    <motion.div
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: 1 }}
+                                        style={{ marginBottom: '1.5rem', color: '#EF4444', background: '#FEF2F2', padding: '1rem', borderRadius: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}
+                                    >
+                                        <AlertCircle size={18} /> Something went wrong. Please try again.
+                                    </motion.div>
                                 )}
 
                                 <button
                                     type="submit"
                                     disabled={status === 'loading'}
-                                    className="btn btn-primary"
-                                    style={{ width: '100%' }}
+                                    className="submit-btn-premium"
                                 >
-                                    {status === 'loading' ? 'Sending...' : 'Send Message'}
+                                    {status === 'loading' ? 'Processing...' : (
+                                        <>Send Message <Send size={18} /></>
+                                    )}
                                 </button>
                             </form>
                         )}
-                    </div>
-
-                </div>
+                    </AnimatePresence>
+                </motion.div>
             </div>
         </div>
     );
