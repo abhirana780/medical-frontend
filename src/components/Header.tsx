@@ -4,6 +4,7 @@ import { Search, ShoppingCart, Menu, Phone, ChevronDown, Heart, X, User, LogOut,
 import { useState, useEffect } from 'react';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
+import { useCurrency } from '../context/CurrencyContext';
 import { CATEGORIES } from '../data/categories';
 import toast from 'react-hot-toast';
 import api from '../utils/api';
@@ -16,6 +17,14 @@ const Header = () => {
     const [searchCategory, setSearchCategory] = useState('');
     const [categoryDropdownOpen, setCategoryDropdownOpen] = useState(false);
     const [userMenuOpen, setUserMenuOpen] = useState(false);
+    const { currency, setCurrency, formatPrice } = useCurrency();
+    const [currencyDropdownOpen, setCurrencyDropdownOpen] = useState(false);
+    const currencies = ['USD', 'XCD', 'TTD', 'EUR'];
+
+    const handleCurrencySelect = (c: any) => {
+        setCurrency(c);
+        setCurrencyDropdownOpen(false);
+    };
 
     // Smart Search State
     const [suggestions, setSuggestions] = useState<any[]>([]);
@@ -173,7 +182,31 @@ const Header = () => {
                             <Link to="/login">Log in / Create Account</Link>
                         )}
                         <span style={{ opacity: 0.5 }}>|</span>
-                        <span>USD</span>
+
+                        <div className="currency-selector" ref={(node) => { if (node) node.style.setProperty('z-index', currencyDropdownOpen ? '1005' : 'auto'); }}>
+                            <div
+                                className="currency-trigger"
+                                onClick={() => setCurrencyDropdownOpen(!currencyDropdownOpen)}
+                            >
+                                {currency} <ChevronDown size={14} />
+                            </div>
+                            {currencyDropdownOpen && (
+                                <>
+                                    <div className="fixed-backdrop" onClick={() => setCurrencyDropdownOpen(false)}></div>
+                                    <div className="currency-dropdown">
+                                        {currencies.map(c => (
+                                            <div
+                                                key={c}
+                                                className={`currency-option ${c === currency ? 'selected' : ''}`}
+                                                onClick={() => handleCurrencySelect(c)}
+                                            >
+                                                {c}
+                                            </div>
+                                        ))}
+                                    </div>
+                                </>
+                            )}
+                        </div>
                         <Link to="/checkout">Check Out</Link>
                     </div>
                 </div>
@@ -301,7 +334,7 @@ const Header = () => {
                                                 {product.name}
                                             </div>
                                             <div style={{ fontSize: '0.85rem', color: '#64748B' }}>
-                                                ${product.price.toFixed(2)}
+                                                {formatPrice(product.price)}
                                             </div>
                                         </div>
                                     </div>

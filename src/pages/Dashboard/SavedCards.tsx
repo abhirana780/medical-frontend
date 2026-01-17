@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { CreditCard, Plus, Trash2, X, Lock } from 'lucide-react';
+import { useCurrency } from '../../context/CurrencyContext';
 
 interface Card {
     id: number;
@@ -12,6 +13,7 @@ interface Card {
 }
 
 const SavedCards = () => {
+    const { formatPrice } = useCurrency();
     const [cards, setCards] = useState<Card[]>([]);
     const [showForm, setShowForm] = useState(false);
 
@@ -254,7 +256,7 @@ const SavedCards = () => {
                                     <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Aug {12 + i}, 2024 at 10:30 AM</div>
                                 </div>
                             </div>
-                            <span style={{ fontWeight: 600 }}>-$129.00</span>
+                            <span style={{ fontWeight: 600 }}>-{formatPrice(129)}</span>
                         </div>
                     ))}
                 </div>

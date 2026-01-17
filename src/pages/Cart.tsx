@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Minus, Plus, Trash2, Heart, Star } from 'lucide-react';
+import { useCurrency } from '../context/CurrencyContext';
 import { useCart } from '../context/CartContext';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
@@ -8,6 +9,7 @@ import './Cart.css';
 
 const Cart = () => {
     const { cart, removeFromCart, updateQuantity, clearCart, cartTotal } = useCart();
+    const { formatPrice } = useCurrency();
 
     // Recommended items (can remain static or be fetched)
     const recommended = [
@@ -109,9 +111,9 @@ const Cart = () => {
                                             <button onClick={() => updateQuantity(item._id, item.quantity + 1)}><Plus size={14} /></button>
                                         </div>
                                         <div className="item-prices">
-                                            <span className="price">${(item.price * item.quantity).toFixed(2)}</span>
+                                            <span className="price">{formatPrice(item.price * item.quantity)}</span>
                                             <span style={{ fontSize: '0.8rem', color: '#94a3b8', display: 'block', textAlign: 'right' }}>
-                                                ${item.price.toFixed(2)} / each
+                                                {formatPrice(item.price)} / each
                                             </span>
                                         </div>
                                     </div>
@@ -131,23 +133,23 @@ const Cart = () => {
                         <div className="order-summary-box">
                             <div className="summary-row">
                                 <span>Subtotal</span>
-                                <span>${cartTotal.toFixed(2)}</span>
+                                <span>{formatPrice(cartTotal)}</span>
                             </div>
                             <div className="summary-row">
                                 <span>Shipping</span>
-                                <span>{shippingCost === 0 ? 'Free' : `$${shippingCost.toFixed(2)}`}</span>
+                                <span>{shippingCost === 0 ? 'Free' : formatPrice(shippingCost)}</span>
                             </div>
                             {discount > 0 && (
                                 <div className="summary-row" style={{ color: '#16A34A' }}>
                                     <span>Discount</span>
-                                    <span>-${discount.toFixed(2)}</span>
+                                    <span>-{formatPrice(discount)}</span>
                                 </div>
                             )}
 
                             <hr className="divider" />
                             <div className="summary-row total">
                                 <span>Total</span>
-                                <span>${finalTotal.toFixed(2)}</span>
+                                <span>{formatPrice(finalTotal)}</span>
                             </div>
 
                             <Link to="/checkout" className="btn btn-primary btn-block checkout-btn">
@@ -186,7 +188,7 @@ const Cart = () => {
                                     <span>({rec.rating})</span>
                                 </div>
                                 <div className="rec-price">
-                                    <strong>${rec.price}</strong> <small>$18.45</small>
+                                    <strong>{formatPrice(rec.price)}</strong> <small>{formatPrice(rec.price * 1.2)}</small>
                                 </div>
                             </div>
                         ))}

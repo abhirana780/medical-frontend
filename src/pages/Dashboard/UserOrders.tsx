@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import { useCurrency } from '../../context/CurrencyContext';
 import api from '../../utils/api';
 
 const UserOrders = () => {
     const { user } = useAuth();
+    const { formatPrice } = useCurrency();
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -68,7 +70,7 @@ const UserOrders = () => {
                             </div>
                         </div>
                         <div className="order-actions-right">
-                            <span className="order-total-price">${order.totalPrice.toFixed(2)}</span>
+                            <span className="order-total-price">{formatPrice(order.totalPrice)}</span>
                             <Link to={`/account/orders/${order._id}`} className="btn btn-outline btn-sm">Track & Review</Link>
                         </div>
                     </div>

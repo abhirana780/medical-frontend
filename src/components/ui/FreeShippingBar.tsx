@@ -1,6 +1,7 @@
 
 import { motion } from 'framer-motion';
 import { Truck } from 'lucide-react';
+import { useCurrency } from '../../context/CurrencyContext';
 
 interface FreeShippingBarProps {
     currentAmount: number;
@@ -8,6 +9,7 @@ interface FreeShippingBarProps {
 }
 
 export const FreeShippingBar = ({ currentAmount, threshold }: FreeShippingBarProps) => {
+    const { formatPrice } = useCurrency();
     const progress = Math.min((currentAmount / threshold) * 100, 100);
     const remaining = Math.max(threshold - currentAmount, 0);
 
@@ -20,7 +22,7 @@ export const FreeShippingBar = ({ currentAmount, threshold }: FreeShippingBarPro
                 <div style={{ flexGrow: 1 }}>
                     {remaining > 0 ? (
                         <p style={{ margin: 0, fontWeight: 500, color: '#334155' }}>
-                            Add <span style={{ color: '#0f172a', fontWeight: 700 }}>${remaining.toFixed(2)}</span> to qualify for <span style={{ color: '#10b981', fontWeight: 700 }}>Free Shipping</span>!
+                            Add <span style={{ color: '#0f172a', fontWeight: 700 }}>{formatPrice(remaining)}</span> to qualify for <span style={{ color: '#10b981', fontWeight: 700 }}>Free Shipping</span>!
                         </p>
                     ) : (
                         <p style={{ margin: 0, fontWeight: 700, color: '#10b981' }}>

@@ -3,6 +3,7 @@ import { useSearchParams, Link } from 'react-router-dom';
 import { ChevronDown, ChevronRight, Grid, List, SlidersHorizontal, Filter, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import PremiumProductCard from '../components/PremiumProductCard';
+import { useCurrency } from '../context/CurrencyContext';
 import api from '../utils/api';
 import { CATEGORIES } from '../data/categories';
 import { AnimatedGradientBackground, GridPattern } from '../components/ui/AnimatedBackground';
@@ -14,6 +15,7 @@ const Catalog = () => {
     const [searchParams] = useSearchParams();
     const searchQuery = searchParams.get('search');
     const categoryQuery = searchParams.get('cat');
+    const { formatPrice } = useCurrency();
 
     const [products, setProducts] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
@@ -212,8 +214,8 @@ const Catalog = () => {
                             </div>
                             <div className="price-slider">
                                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem', fontSize: '0.9rem' }}>
-                                    <span>${priceRange[0]}</span>
-                                    <span>${priceRange[1]}+</span>
+                                    <span>{formatPrice(priceRange[0])}</span>
+                                    <span>{formatPrice(priceRange[1])}+</span>
                                 </div>
                                 <input
                                     type="range"

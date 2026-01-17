@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { useWishlist } from '../context/WishlistContext';
 import { useCompare } from '../context/CompareContext';
+import { useCurrency } from '../context/CurrencyContext';
 import { ShoppingCart, Heart, Eye, Check, ArrowLeftRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState } from 'react';
@@ -25,6 +26,7 @@ const ProductCard = ({ product, viewMode = 'grid' }: { product: Product, viewMod
     const { addToCart } = useCart();
     const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
     const { addToCompare, isInCompare, removeFromCompare } = useCompare();
+    const { formatPrice } = useCurrency();
     const [isHovered, setIsHovered] = useState(false);
     const [isAdded, setIsAdded] = useState(false);
     const inWishlist = isInWishlist(product._id);
@@ -195,8 +197,8 @@ const ProductCard = ({ product, viewMode = 'grid' }: { product: Product, viewMod
                 </p>
 
                 <div className="price-box">
-                    <span className="current-price">${product.price.toFixed(2)}</span>
-                    {product.oldPrice && <span className="old-price">${product.oldPrice.toFixed(2)}</span>}
+                    <span className="current-price">{formatPrice(product.price)}</span>
+                    {product.oldPrice && <span className="old-price">{formatPrice(product.oldPrice)}</span>}
                 </div>
 
                 {product.countInStock !== undefined && product.countInStock > 0 && product.countInStock < 5 && (

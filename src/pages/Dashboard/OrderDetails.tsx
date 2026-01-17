@@ -4,11 +4,13 @@ import { usePDF } from '@react-pdf/renderer';
 import InvoicePDF from '../../components/InvoicePDF';
 import { MapPin, CreditCard, Undo2, Download } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import { useCurrency } from '../../context/CurrencyContext';
 import api from '../../utils/api';
 
 const OrderDetails = () => {
     const { id } = useParams();
     const { user } = useAuth();
+    const { formatPrice } = useCurrency();
     const [order, setOrder] = useState<any>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
@@ -80,7 +82,7 @@ const OrderDetails = () => {
                             <div>
                                 <h4>{item.name}</h4>
                                 <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>Qty: {item.qty}</p>
-                                <p style={{ fontWeight: '600' }}>${item.price.toFixed(2)}</p>
+                                <p style={{ fontWeight: '600' }}>{formatPrice(item.price)}</p>
                             </div>
                         </div>
                         <Link
@@ -112,13 +114,13 @@ const OrderDetails = () => {
                     </h4>
                     <div style={{ marginTop: '1rem', display: 'flex', flexDirection: 'column', gap: '0.5rem', fontSize: '0.9rem' }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                            <span>Subtotal</span><span>${(itemsPrice || 0).toFixed(2)}</span>
+                            <span>Subtotal</span><span>{formatPrice(itemsPrice || 0)}</span>
                         </div>
                         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                            <span>Shipping</span><span>${(shippingPrice || 0).toFixed(2)}</span>
+                            <span>Shipping</span><span>{formatPrice(shippingPrice || 0)}</span>
                         </div>
                         <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: 'bold', borderTop: '1px solid #ddd', paddingTop: '0.5rem' }}>
-                            <span>Total</span><span>${(totalPrice || 0).toFixed(2)}</span>
+                            <span>Total</span><span>{formatPrice(totalPrice || 0)}</span>
                         </div>
                         <div style={{ marginTop: '0.5rem', color: '#166534', fontSize: '0.8rem' }}>
                             Payment Method: {paymentMethod === 'credit-card' ? 'Credit Card' : paymentMethod?.toUpperCase()}

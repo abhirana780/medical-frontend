@@ -4,6 +4,7 @@ import { ShoppingCart, Heart, Check, ArrowLeftRight } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { useWishlist } from '../context/WishlistContext';
 import { useCompare } from '../context/CompareContext';
+import { useCurrency } from '../context/CurrencyContext';
 import { useState, useCallback } from 'react';
 import { Meteors } from './ui/Meteors';
 
@@ -26,6 +27,7 @@ const PremiumProductCard = ({ product, index = 0, viewMode = 'grid' }: { product
     const { addToCart } = useCart();
     const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
     const { addToCompare, isInCompare, removeFromCompare } = useCompare();
+    const { formatPrice } = useCurrency();
     const [isAdded, setIsAdded] = useState(false);
 
     const isOutOfStock = product.countInStock === 0;
@@ -256,8 +258,8 @@ const PremiumProductCard = ({ product, index = 0, viewMode = 'grid' }: { product
                     gap: viewMode === 'list' ? '2rem' : '0'
                 }}>
                     <div style={{ display: 'flex', flexDirection: 'column' }}>
-                        <span style={{ fontSize: '1.25rem', fontWeight: 800, color: '#0F172A' }}>${product.price ? product.price.toFixed(2) : '0.00'}</span>
-                        {product.oldPrice && <span style={{ fontSize: '0.8rem', color: '#94A3B8', textDecoration: 'line-through' }}>${product.oldPrice.toFixed(2)}</span>}
+                        <span style={{ fontSize: '1.25rem', fontWeight: 800, color: '#0F172A' }}>{product.price ? formatPrice(product.price) : formatPrice(0)}</span>
+                        {product.oldPrice && <span style={{ fontSize: '0.8rem', color: '#94A3B8', textDecoration: 'line-through' }}>{formatPrice(product.oldPrice)}</span>}
                     </div>
 
                     <div style={{ display: 'flex', gap: '0.5rem', flex: viewMode === 'list' ? 1 : 'none', justifyContent: 'flex-end' }}>

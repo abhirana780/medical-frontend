@@ -1,6 +1,8 @@
 import { Truck, Clock, ShieldCheck, MapPin } from 'lucide-react';
+import { useCurrency } from '../context/CurrencyContext';
 
 const ShippingPolicy = () => {
+    const { formatPrice } = useCurrency();
     return (
         <div className="section">
             <div className="container" style={{ maxWidth: '900px' }}>
@@ -10,7 +12,7 @@ const ShippingPolicy = () => {
                     <div style={{ textAlign: 'center', padding: '1.5rem', border: '1px solid var(--border)', borderRadius: '1rem' }}>
                         <Truck size={32} color="var(--primary)" style={{ marginBottom: '1rem' }} />
                         <h4 style={{ margin: '0 0 0.5rem' }}>Free Shipping</h4>
-                        <p className="text-muted" style={{ fontSize: '0.9rem' }}>On orders over $50</p>
+                        <p className="text-muted" style={{ fontSize: '0.9rem' }}>On orders over {formatPrice(50)}</p>
                     </div>
                     <div style={{ textAlign: 'center', padding: '1.5rem', border: '1px solid var(--border)', borderRadius: '1rem' }}>
                         <Clock size={32} color="var(--primary)" style={{ marginBottom: '1rem' }} />
@@ -54,17 +56,17 @@ const ShippingPolicy = () => {
                             <tr>
                                 <td style={{ padding: '1rem', border: '1px solid #E2E8F0' }}>Standard Shipping</td>
                                 <td style={{ padding: '1rem', border: '1px solid #E2E8F0' }}>3-5 business days</td>
-                                <td style={{ padding: '1rem', border: '1px solid #E2E8F0' }}>$5.99 (Free over $50)</td>
+                                <td style={{ padding: '1rem', border: '1px solid #E2E8F0' }}>{formatPrice(5.99)} (Free over {formatPrice(50)})</td>
                             </tr>
                             <tr>
                                 <td style={{ padding: '1rem', border: '1px solid #E2E8F0' }}>Expedited Shipping</td>
                                 <td style={{ padding: '1rem', border: '1px solid #E2E8F0' }}>2 business days</td>
-                                <td style={{ padding: '1rem', border: '1px solid #E2E8F0' }}>$12.95</td>
+                                <td style={{ padding: '1rem', border: '1px solid #E2E8F0' }}>{formatPrice(12.95)}</td>
                             </tr>
                             <tr>
                                 <td style={{ padding: '1rem', border: '1px solid #E2E8F0' }}>Overnight Shipping</td>
                                 <td style={{ padding: '1rem', border: '1px solid #E2E8F0' }}>1-2 business days</td>
-                                <td style={{ padding: '1rem', border: '1px solid #E2E8F0' }}>$19.95</td>
+                                <td style={{ padding: '1rem', border: '1px solid #E2E8F0' }}>{formatPrice(19.95)}</td>
                             </tr>
                         </tbody>
                     </table>

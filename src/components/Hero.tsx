@@ -2,7 +2,13 @@ import { Link } from 'react-router-dom';
 import { Truck, ShieldCheck, Phone } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { AnimatedGradientBackground, GridPattern, FloatingParticles, WaveAnimation } from './ui/AnimatedBackground';
+
 import './Hero.css';
+
+import heroMain from '../assets/hero-main-v2.png';
+import heroMonitor from '../assets/hero-monitor-v2.png';
+import heroWalker from '../assets/hero-walker-v2.png';
+import heroCpap from '../assets/hero-cpap-v2.png';
 
 const Hero = () => {
     return (
@@ -105,31 +111,31 @@ const Hero = () => {
                             transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
                         ></motion.div>
                         <motion.img
-                            src="https://images.unsplash.com/photo-1638202993928-7267aad84c31?q=80&w=1000&auto=format&fit=crop"
-                            alt="Healthcare Collage"
+                            src={heroMain}
+                            alt="Medical Equipment Showroom"
                             className="MainImage"
                             animate={{ y: [-10, 10, -10] }}
                             transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
                         />
                         {/* Decorative small circles simulating the collage effect */}
                         <motion.img
-                            src="https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?q=80&w=200&auto=format&fit=crop"
+                            src={heroMonitor}
                             className="floating-img img-1"
-                            alt=""
+                            alt="Vital Signs Monitor"
                             animate={{ y: [0, -15, 0], x: [0, 5, 0] }}
                             transition={{ duration: 4, repeat: Infinity, delay: 0 }}
                         />
                         <motion.img
-                            src="https://images.unsplash.com/photo-1584515933487-779824d29309?q=80&w=200&auto=format&fit=crop"
+                            src={heroWalker}
                             className="floating-img img-2"
-                            alt=""
+                            alt="Mobility Walker"
                             animate={{ y: [0, 20, 0], x: [0, -5, 0] }}
                             transition={{ duration: 5, repeat: Infinity, delay: 1 }}
                         />
                         <motion.img
-                            src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?q=80&w=200&auto=format&fit=crop"
+                            src={heroCpap}
                             className="floating-img img-3"
-                            alt=""
+                            alt="CPAP Machine"
                             animate={{ y: [0, -10, 0], x: [0, -5, 0] }}
                             transition={{ duration: 6, repeat: Infinity, delay: 2 }}
                         />

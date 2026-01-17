@@ -1,13 +1,16 @@
-import { Search, MapPin, Calendar, CheckCircle, ThumbsUp, MessageCircle, DollarSign, Filter } from 'lucide-react';
+import { Search, MapPin, Calendar, CheckCircle, ThumbsUp, MessageCircle, Filter } from 'lucide-react';
+import { useCurrency } from '../context/CurrencyContext';
 import './Doctors.css';
 
 const Doctors = () => {
+    const { formatPrice } = useCurrency();
     const doctors = [
         {
             name: "Dr. Allison K. Davis",
             specialty: "Cardiologist",
             exp: "12 years",
-            fees: "$100 - $400",
+            minFee: 100,
+            maxFee: 400,
             location: "New York, USA",
             rating: "98%",
             img: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?q=80&w=200&auto=format&fit=crop"
@@ -16,7 +19,8 @@ const Doctors = () => {
             name: "Dr. Dennis S. Hrey",
             specialty: "Cardiologist",
             exp: "20 years",
-            fees: "$300 - $1000",
+            minFee: 300,
+            maxFee: 1000,
             location: "Florida, USA",
             rating: "100%",
             img: "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?q=80&w=200&auto=format&fit=crop"
@@ -25,7 +29,8 @@ const Doctors = () => {
             name: "Dr. Nancy R. Neulton",
             specialty: "Cardiologist",
             exp: "10 years",
-            fees: "$150 - $450",
+            minFee: 150,
+            maxFee: 450,
             location: "New York, USA",
             rating: "95%",
             img: "https://images.unsplash.com/photo-1594824476969-519478cae374?q=80&w=200&auto=format&fit=crop"
@@ -34,7 +39,8 @@ const Doctors = () => {
             name: "Dr. Peter J. Lio",
             specialty: "Cardiologist",
             exp: "14 years",
-            fees: "$120 - $500",
+            minFee: 120,
+            maxFee: 500,
             location: "Texas, USA",
             rating: "92%",
             img: "https://images.unsplash.com/photo-1622253692010-333f2da6031d?q=80&w=200&auto=format&fit=crop"
@@ -43,7 +49,8 @@ const Doctors = () => {
             name: "Dr. James K. Valeri",
             specialty: "Cardiologist",
             exp: "13 years",
-            fees: "$140 - $600",
+            minFee: 140,
+            maxFee: 600,
             location: "California, USA",
             rating: "94%",
             img: "https://images.unsplash.com/photo-1537368910025-700350fe46c7?q=80&w=200&auto=format&fit=crop"
@@ -52,7 +59,8 @@ const Doctors = () => {
             name: "Dr. Lissa T. Williams",
             specialty: "Cardiologist",
             exp: "8 years",
-            fees: "$100 - $300",
+            minFee: 100,
+            maxFee: 300,
             location: "Chicago, USA",
             rating: "97%",
             img: "https://images.unsplash.com/photo-1622902911615-87f625372b95?q=80&w=200&auto=format&fit=crop"
@@ -109,7 +117,7 @@ const Doctors = () => {
                                         </div>
                                         <div className="doc-meta">
                                             <span><MapPin size={14} /> {doc.location}</span>
-                                            <span><DollarSign size={14} /> {doc.fees}</span>
+                                            <span>{formatPrice(doc.minFee)} - {formatPrice(doc.maxFee)}</span>
                                         </div>
                                         <div className="availability-badge">
                                             <Calendar size={12} /> Available Today

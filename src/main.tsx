@@ -2,6 +2,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { HelmetProvider } from 'react-helmet-async';
 import { Buffer } from 'buffer';
+import { CurrencyProvider } from './context/CurrencyContext.tsx';
 import './index.css'
 import App from './App.tsx'
 
@@ -12,8 +13,10 @@ if (typeof window !== 'undefined') {
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <HelmetProvider>
-      <App />
-    </HelmetProvider>
+    <CurrencyProvider>
+      <HelmetProvider>
+        <App />
+      </HelmetProvider>
+    </CurrencyProvider>
   </StrictMode>,
 )

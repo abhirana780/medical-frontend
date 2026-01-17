@@ -5,6 +5,7 @@ import PremiumProductCard from '../components/PremiumProductCard';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import { useWishlist } from '../context/WishlistContext';
+import { useCurrency } from '../context/CurrencyContext';
 import api from '../utils/api';
 import './ProductDetails.css';
 import Loading from '../components/Loading';
@@ -18,6 +19,7 @@ const ProductDetails = () => {
     const { addToCart } = useCart();
     const { user } = useAuth();
     const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
+    const { formatPrice } = useCurrency();
 
     // State
     const [product, setProduct] = useState<any | null>(null);
@@ -223,7 +225,7 @@ const ProductDetails = () => {
                         </div>
                         <div className="pd-main-image">
                             {product.oldPrice && product.price < product.oldPrice && (
-                                <span className="discount-tag">Save ${(product.oldPrice - product.price).toFixed(0)}</span>
+                                <span className="discount-tag">Save {formatPrice(product.oldPrice - product.price)}</span>
                             )}
                             <img src={activeImg || product.image} alt={product.name} />
                         </div>
@@ -247,8 +249,8 @@ const ProductDetails = () => {
                         </div>
 
                         <div className="pd-price-row">
-                            <span className="pd-price">${product.price.toFixed(2)}</span>
-                            {product.oldPrice && <span className="pd-old-price">${product.oldPrice.toFixed(2)}</span>}
+                            <span className="pd-price">{formatPrice(product.price)}</span>
+                            {product.oldPrice && <span className="pd-old-price">{formatPrice(product.oldPrice)}</span>}
                         </div>
 
                         <p style={{ marginBottom: '2rem', color: '#64748B', lineHeight: 1.6 }}>
@@ -294,7 +296,7 @@ const ProductDetails = () => {
                                 <Truck size={20} color="var(--primary)" />
                                 <div>
                                     <strong>Free Shipping</strong>
-                                    <div style={{ color: '#64748B', fontSize: '0.8rem' }}>On orders over $300</div>
+                                    <div style={{ color: '#64748B', fontSize: '0.8rem' }}>On orders over {formatPrice(300)}</div>
                                 </div>
                             </div>
                             <div className="meta-item">
@@ -431,7 +433,7 @@ const ProductDetails = () => {
                                 <img src={p.image} alt={p.name} className="related-thumb" />
                                 <div>
                                     <div style={{ fontSize: '0.9rem', fontWeight: '500', lineHeight: 1.2, marginBottom: '0.25rem' }}>{p.name}</div>
-                                    <div style={{ color: 'var(--primary)', fontWeight: '700' }}>${p.price.toFixed(2)}</div>
+                                    <div style={{ color: 'var(--primary)', fontWeight: '700' }}>{formatPrice(p.price)}</div>
                                     <Link to={`/product/${p._id}`} className="btn btn-outline btn-xs" style={{ marginTop: '0.5rem', fontSize: '0.7rem', textDecoration: 'none', display: 'inline-block' }}>View</Link>
                                 </div>
                             </div>

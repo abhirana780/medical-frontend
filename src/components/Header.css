@@ -634,3 +634,63 @@
 .suggestion-item:not(:last-child) {
     border-bottom: 1px solid #F1F5F9;
 }
+
+/* Currency Selector */
+.currency-selector {
+    position: relative;
+    z-index: 1002;
+}
+
+.currency-trigger {
+    background: #3b82f6;
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.currency-trigger:hover {
+    background: #2563eb;
+}
+
+.currency-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 0.25rem;
+    background: #1e293b;
+    border-radius: 4px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    z-index: 1003;
+    min-width: 80px;
+    display: flex;
+    flex-direction: column;
+}
+
+.currency-option {
+    padding: 0.5rem 0;
+    width: 100%;
+    color: #cbd5e1;
+    font-size: 0.8rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-weight: 500;
+}
+
+.currency-option:hover {
+    background: #334155;
+    color: white;
+}
+
+.currency-option.selected {
+    background: #3b82f6;
+    color: white;
+}
