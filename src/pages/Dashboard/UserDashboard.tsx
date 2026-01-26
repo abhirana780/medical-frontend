@@ -1,4 +1,4 @@
-import { Link, Outlet, useLocation, useNavigate, Navigate } from 'react-router-dom';
+import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { User, Package, Heart, MapPin, CreditCard, Bell, Settings, LogOut, FileText, LayoutDashboard } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import './Dashboard.css';
